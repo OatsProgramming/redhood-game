@@ -6,9 +6,10 @@ type AnimNames = 'stand' | 'walk' | 'run'
 function App() {
   const [animation, setAnimation] = useState<AnimNames>('stand')
   const divRef = useRef<HTMLDivElement>(null)
+  // Set initial character location at the middle
   const [move, setMove] = useState({
-    x: 0,
-    y: 0,
+    x: document.documentElement.clientWidth / 2,
+    y: document.documentElement.clientHeight / 2,
   })
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function App() {
       if (e.key.includes('Arrow')) {
         if (e.shiftKey) {
           animation !== 'run' && setAnimation('run')
-          moveX = moveY = 10
+          moveX = moveY = 15
         } else {
           animation !== 'walk' && setAnimation('walk')
           moveX = moveY = 5
@@ -57,10 +58,26 @@ function App() {
           break;
         }
       }
-      setMove(prev => ({
-        x: prev.x + moveX,
-        y: prev.y + moveY
-      }))
+      setMove(prev => {
+        // Add in-game boundaries
+        let x = prev.x + moveX
+        let y = prev.y + moveY
+
+        // Using clientWidth / clientHeight just in case of scrollbar present
+        if (0 >= prev.x) {
+          x = prev.x + 10
+        } else if (document.documentElement.clientWidth - 20 <= prev.x) {
+          x = prev.x - 10
+        }
+
+        if (0 >= prev.y) {
+          y = prev.y + 10
+        } else if (document.documentElement.clientHeight - 50 <= prev.y) {
+          y = prev.y - 10
+        }
+
+        return ({ x, y })
+      })
     }
 
     // Neutral animation

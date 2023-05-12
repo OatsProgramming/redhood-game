@@ -3,9 +3,9 @@
   width: 30px;
   height: 30px;
   border: 1px solid red;
-  position: relative;
+  position: fixed;
   scale: 2;
-  transition: all 200ms ease
+  transition: all 200ms ease;
 }
 
 /* initial translate: 0 -3px*/
