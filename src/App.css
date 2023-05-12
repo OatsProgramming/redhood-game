@@ -1,0 +1,88 @@
+.main {
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  border: 1px solid red;
+  position: relative;
+  scale: 2;
+  transition: all 200ms ease
+}
+
+/* initial translate: 0 -3px*/
+/* For every different animation go down by 32px ish ( add the three ) */
+
+/* -32px per frame when animating */
+/* steps = frame.length - 1 */
+
+.main > img {
+  position: absolute;
+}
+
+.turnLeft {
+  transform: scaleX(-1);
+}
+
+.stand {
+  translate: 0 -3px;
+  animation: stand 3s steps(1) infinite;
+}
+
+.jump {
+  translate: 0 -161px;
+  animation: jump 1s steps(7) infinite;
+}
+
+.walk {
+  translate: 0 -68px;
+  animation: walk 1s steps(3) infinite;
+}
+
+.run {
+  translate: 0 -99px;
+  animation: run 1s steps(7) infinite;
+}
+
+@keyframes run {
+  to {
+    translate: -224px -99px;
+  }
+}
+
+@keyframes walk {
+  to {
+    translate: -96px -68px;
+  }
+}
+
+@keyframes jump {
+  to {
+    translate: -224px -161px;
+  }
+}
+
+/* 100 (percentage) % 8 (frames) => 14.3  */
+/* 0  14.3  28.6  42.9  57.1  71.4  85.7  100 */
+@keyframes stand {
+  /* initial */
+  0%,
+  28.6%,
+  85.7%
+  {
+    translate: 0 -3px
+  }
+  /* legs bend down */
+  14.3%,
+  42.9%,
+  100%
+  {
+    translate: -32px -3px
+  }
+  /* eyes start to close */
+  57.1% {
+    translate: 0 -35px
+  }
+  /* eyes closed */
+  71.4% {
+    translate: -32px -35px
+  }
+}
