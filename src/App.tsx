@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
-type AnimNames = 'stand' | 'walk' | 'run'
+type AnimNames = 'stand' | 'walk' | 'run' | 'jump'
 
 function App() {
   const [animation, setAnimation] = useState<AnimNames>('stand')
@@ -27,6 +27,8 @@ function App() {
           animation !== 'walk' && setAnimation('walk')
           moveX = moveY = 5
         }
+      } else if (e.code === 'Space') {
+          animation !== 'jump' && setAnimation('jump')
       }
 
       // Determine the direction
@@ -97,9 +99,14 @@ function App() {
 
 
   return (
-    <div className='main' ref={divRef} style={{ 
-      left: `${move.x}px`, 
-      top: `${move.y}px` 
+    <div className='main' 
+      ref={divRef} 
+      onAnimationEnd={() => {
+        if (animation === 'jump') setAnimation('stand')
+      }}
+      style={{ 
+        left: `${move.x}px`, 
+        top: `${move.y}px` 
     }}>
       <img
         className={animation}

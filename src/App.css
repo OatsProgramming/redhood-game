@@ -29,7 +29,7 @@
 
 .jump {
   translate: 0 -161px;
-  animation: jump 1s steps(7) infinite;
+  animation: jump 1s steps(7) 1;
 }
 
 .walk {
