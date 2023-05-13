@@ -13,6 +13,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         const animation = get().animation
         const isGoing = get().isGoing
         const currentPos = get().getCurrentPos(div)
+        const timerId = get().timerId
 
         div.style.setProperty('--duration', '200ms')
 
@@ -20,7 +21,10 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         let moveY = 0
 
         // if goHere() called first, stop that animation
-        if (isGoing) set({ isGoing: false, move: currentPos })
+        if (isGoing && timerId) {
+            clearTimeout(timerId)
+            set({ isGoing: false, move: currentPos, timerId: null })
+        }
         // Determine the speed
         if (e.key.includes('Arrow')) {
             if (e.shiftKey) {
@@ -88,7 +92,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     // If user wants to tap the screen
     goHere: (e) => {
         const isGoing = get().isGoing
-        const time = get().timerId
+        const timerId = get().timerId
         const div = get().character!
         const currentPos = get().getCurrentPos(div)
         // Not pageX | pageY: only care about client window
@@ -98,12 +102,16 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         }
         
         // Check to see if there's an active transition
-        if (isGoing && time) {
+        if (isGoing) {
             const desiredPos = get().move
             // If user clicked on the same spot stop the callback 
             if (isEqual(newPos, desiredPos)) return
+            // If clicked at a different spot, trash the timer to lower memory
+            else if (timerId) {
+                clearTimeout(timerId)
+                set({ timerId: null })
+            }
 
-            clearTimeout(time)
             set({ move: currentPos })
         } 
 
@@ -127,14 +135,14 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
 
         // Schedule a separate macrotask to let goHere() be considered finished
         // This will help with setStates
-        const timerId = setTimeout(() => {
+        const id = setTimeout(() => {
             set({ animation: 'walk' })
             setTimeout(() => {
                 set({ animation: 'stand', isGoing: false })
             }, (durationPointer * (1 / 3)))
         }, (durationPointer * (2 / 3)))
 
-        set({ timerId: timerId })
+        set({ timerId: id })
     },
     // Neutral animation
     toStand: (e) => {
