@@ -7,7 +7,8 @@ type Position = { x: number, y: number }
 type CharacterState = {
     character: HTMLDivElement | null,
     animation: AnimNames,
-    move: Position
+    move: Position,
+    isGoing: boolean,
 }
 
 type CharacterAction = {

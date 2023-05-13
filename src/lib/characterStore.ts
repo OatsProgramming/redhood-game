@@ -4,16 +4,28 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     character: null,
     animation: 'stand',
     move: { x: 0, y: 0 },
+    isGoing: false,
     // If user is using keys to interact
     changeAnimation: (e) => {
         const div = get().character!
         const animation = get().animation
+        const isGoing = get().isGoing
+
+        // Get position while transitioning (if goHere() called first)
+        // use computed to get current pos (el.style will give end result rather in btwn)
+        const computedDiv = getComputedStyle(div)
+        const currentPos: Position = {
+            x: parseInt(computedDiv.left),
+            y: parseInt(computedDiv.top),
+        }
 
         div.style.setProperty('--duration', '200ms')
 
         let moveX = 0
         let moveY = 0
 
+        // if goHere() called first, stop that animation
+        if (isGoing) set({ isGoing: false, move: currentPos })
         // Determine the speed
         if (e.key.includes('Arrow')) {
             if (e.shiftKey) {
@@ -27,7 +39,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
             }
         } else if (e.code === 'Space') {
             animation !== 'jump' && set({ animation: 'jump' })
-        }
+        } 
 
         // Determine the direction
         switch (e.key) {
@@ -110,14 +122,15 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         else div.classList.remove('turnLeft')
 
         // Start transition
-        set({ animation: 'run' })
-        set({ move: newPos })
+        set({ animation: 'run', move: newPos, isGoing: true })
 
         // Schedule a separate macrotask to let goHere() be considered finished
         // This will help with setStates
         setTimeout(() => {
             set({ animation: 'walk' })
-            setTimeout(() => set({ animation: 'stand' }), (durationPointer * (1 / 3)))
+            setTimeout(() => {
+                set({ animation: 'stand', isGoing: false })
+            }, (durationPointer * (1 / 3)))
         }, (durationPointer * (2 / 3)))
     },
     // Neutral animation

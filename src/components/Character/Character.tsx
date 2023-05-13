@@ -5,6 +5,7 @@ import useCharacter from '../../lib/characterStore'
 export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
   const { move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setInitPos } = useCharacter()
+  
   useEffect(() => {
     // Set initial character location at the middle
     const windowCenter = {
@@ -12,7 +13,6 @@ export default function Character() {
       y: window.innerHeight / 2,
     }
     setInitPos(windowCenter)
-
     setCharacter(divRef.current)
 
     window.addEventListener('keydown', changeAnimation)
