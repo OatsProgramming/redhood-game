@@ -9,6 +9,7 @@ type CharacterState = {
     animation: AnimNames,
     move: Position,
     isGoing: boolean,
+    timerId: number | null
 }
 
 type CharacterAction = {
@@ -18,4 +19,5 @@ type CharacterAction = {
     setCharacter: (el: HTMLDivElement | null) => void,
     setAnimation: (action: AnimNames) => void,
     setInitPos: (init: Position) => void,
+    getCurrentPos: (el: HTMLDivElement) => Position
 }

@@ -1,23 +1,18 @@
 import { create } from 'zustand'
+import isEqual from 'lodash/isEqual'
 
 const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     character: null,
     animation: 'stand',
     move: { x: 0, y: 0 },
     isGoing: false,
+    timerId: null,
     // If user is using keys to interact
     changeAnimation: (e) => {
         const div = get().character!
         const animation = get().animation
         const isGoing = get().isGoing
-
-        // Get position while transitioning (if goHere() called first)
-        // use computed to get current pos (el.style will give end result rather in btwn)
-        const computedDiv = getComputedStyle(div)
-        const currentPos: Position = {
-            x: parseInt(computedDiv.left),
-            y: parseInt(computedDiv.top),
-        }
+        const currentPos = get().getCurrentPos(div)
 
         div.style.setProperty('--duration', '200ms')
 
@@ -44,29 +39,27 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         // Determine the direction
         switch (e.key) {
             // Turn off moveY for x-axis only direction
-            // Toggle moveX direction
             case 'ArrowLeft': {
                 moveY *= 0
+                // Alt moveX direction
+                moveX *= -1
                 div.classList.add('turnLeft')
-                if (moveX > 0) moveX *= -1
                 break;
             }
             case 'ArrowRight': {
                 moveY *= 0
                 div.classList.remove('turnLeft')
-                if (moveX < 0) moveX *= -1
                 break;
             }
             // Turn off moveX for y-axis only direction
-            // Toggle moveY direction
             case 'ArrowUp': {
                 moveX *= 0
-                if (moveY > 0) moveY *= -1
+                // Alt moveY direction
+                moveY *= -1
                 break;
             }
             case 'ArrowDown': {
                 moveX *= 0
-                if (moveY < 0) moveY *= -1
                 break;
             }
         }
@@ -94,17 +87,25 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     },
     // If user wants to tap the screen
     goHere: (e) => {
+        const isGoing = get().isGoing
+        const time = get().timerId
         const div = get().character!
-
-        const currentPos = {
-            x: parseInt(div.style.left),
-            y: parseInt(div.style.top)
-        }
+        const currentPos = get().getCurrentPos(div)
         // Not pageX | pageY: only care about client window
         const newPos = {
             x: e.clientX - div.offsetWidth / 2,
             y: e.clientY - div.offsetHeight / 2,
         }
+        
+        // Check to see if there's an active transition
+        if (isGoing && time) {
+            const desiredPos = get().move
+            // If user clicked on the same spot stop the callback 
+            if (isEqual(newPos, desiredPos)) return
+
+            clearTimeout(time)
+            set({ move: currentPos })
+        } 
 
         // Get the distance btwn current position and place of interest
         const distance = Math.sqrt(
@@ -126,12 +127,14 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
 
         // Schedule a separate macrotask to let goHere() be considered finished
         // This will help with setStates
-        setTimeout(() => {
+        const timerId = setTimeout(() => {
             set({ animation: 'walk' })
             setTimeout(() => {
                 set({ animation: 'stand', isGoing: false })
             }, (durationPointer * (1 / 3)))
         }, (durationPointer * (2 / 3)))
+
+        set({ timerId: timerId })
     },
     // Neutral animation
     toStand: (e) => {
@@ -139,7 +142,16 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     },
     setCharacter: (el) => set({ character: el }),
     setAnimation: (action) => set({ animation: action }),
-    setInitPos: (init) => set({ move: init })
+    setInitPos: (init) => set({ move: init }),
+    getCurrentPos: (char) => {
+        // Get position while transitioning (if goHere() called first)
+        // use computed to get current pos (el.style will give end result rather in btwn)
+        const computedChar = getComputedStyle(char)
+        return ({
+            x: parseInt(computedChar.left),
+            y: parseInt(computedChar.top)
+        })
+    }
 }))
 
 export default useCharacter
