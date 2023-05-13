@@ -1,11 +1,10 @@
-.main {
+.charBox {
   overflow: hidden;
   width: 30px;
   height: 30px;
-  border: 1px solid red;
   position: fixed;
   scale: 2;
-  transition: all 200ms ease;
+  transition: left var(--duration) ease, top var(--duration) ease;
 }
 
 /* initial translate: 0 -3px*/
@@ -14,7 +13,7 @@
 /* -32px per frame when animating */
 /* steps = frame.length - 1 */
 
-.main > img {
+.charBox > img {
   position: absolute;
 }
 

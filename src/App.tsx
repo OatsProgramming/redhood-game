@@ -13,8 +13,12 @@ function App() {
   })
 
   useEffect(() => {
+    const div = divRef.current!
+
+    // If user is using keys to interact
     function changeAnimation(e: KeyboardEvent) {
-      const div = divRef.current!
+      div.style.setProperty('--duration', '200ms')
+
       let moveX = 0
       let moveY = 0
 
@@ -28,11 +32,11 @@ function App() {
           moveX = moveY = 5
         }
       } else if (e.code === 'Space') {
-          animation !== 'jump' && setAnimation('jump')
+        animation !== 'jump' && setAnimation('jump')
       }
 
       // Determine the direction
-      switch(e.key) {
+      switch (e.key) {
         // Turn off moveY for x-axis only direction
         // Toggle moveX direction
         case 'ArrowLeft': {
@@ -61,10 +65,10 @@ function App() {
         }
       }
       setMove(prev => {
-        // Add in-game boundaries
         let x = prev.x + moveX
         let y = prev.y + moveY
-
+        
+        // Add in-game boundaries
         // Using clientWidth / clientHeight just in case of scrollbar present
         if (0 >= prev.x) {
           x = prev.x + 10
@@ -89,25 +93,66 @@ function App() {
       }
     }
 
+    // If user wants to tap the screen
+    function goHere(e: PointerEvent) {
+      const currentPos = {
+        x: parseInt(div.style.left),
+        y: parseInt(div.style.top)
+      }
+      // Not pageX | pageY: only care about client window
+      const newPos = {
+        x: e.clientX - div.offsetWidth / 2,
+        y: e.clientY - div.offsetHeight / 2,
+      }
+
+      // Get the distance btwn current position and place of interest
+      const distance = Math.sqrt(
+        Math.pow((currentPos.x - newPos.x), 2)
+        + Math.pow((currentPos.y - newPos.y), 2)
+      )
+      
+      // To deal with how long the transition will be
+      const durationPointer = (Math.round(distance * 10 / 1.5))
+      div.style.setProperty('--duration', durationPointer + 'ms')
+      
+      // Determine which way the character should face
+      const direction = currentPos.x - newPos.x
+      if (direction > 0) div.classList.add('turnLeft')
+      else div.classList.remove('turnLeft')
+
+      // Start transition
+      setAnimation('run')
+      setMove(newPos)
+
+      // Schedule a separate macrotask to let goHere() be considered finished
+      // This will help with setStates
+      setTimeout(() => {
+        setAnimation('walk')
+        setTimeout(() => setAnimation('stand'), (durationPointer * (1 / 3)))
+      }, (durationPointer * (2 / 3)))
+    }
+
     window.addEventListener('keydown', changeAnimation)
     window.addEventListener('keyup', toStand)
+    document.documentElement.addEventListener('pointerdown', goHere)
     return () => {
       window.removeEventListener('keydown', changeAnimation)
       window.removeEventListener('keyup', toStand)
+      document.documentElement.removeEventListener('pointerdown', goHere)
     }
   }, [])
 
-
   return (
-    <div className='main' 
-      ref={divRef} 
+    <div className='charBox'
+      ref={divRef}
       onAnimationEnd={() => {
         if (animation === 'jump') setAnimation('stand')
       }}
-      style={{ 
-        left: `${move.x}px`, 
-        top: `${move.y}px` 
-    }}>
+      // Forgot what it was but doing this to prevent errors
+      style={{
+        left: `${move.x}px`,
+        top: `${move.y}px`
+      }}>
       <img
         className={animation}
         src='/character.png'
