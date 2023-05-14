@@ -1,18 +1,19 @@
 .charBox {
+    --init-x-pos: -5px;
     overflow: hidden;
-    width: 30px;
+    width: 20px;
     height: 30px;
     position: fixed;
     scale: 2;
     transition: left var(--duration) ease, top var(--duration) ease;
-    border: 1px solid green
+    /* border: 1px solid green; */
   }
   
-  /* initial translate: 0 -3px*/
+  /* initial translate: var(--init-x-pos) -3px*/
   /* For every different animation go down by 32px ish ( add the three ) */
   
   /* -32px per frame when animating */
-  /* steps = frame.length - 1 */
+  /* steps = frames.length - 1 */
   
   .charBox > img {
     position: absolute;
@@ -23,40 +24,40 @@
   }
   
   .stand {
-    translate: 0 -3px;
+    translate: var(--init-x-pos) -3px;
     animation: stand 3s steps(1) infinite;
   }
   
   .jump {
-    translate: 0 -161px;
+    translate: var(--init-x-pos) -161px;
     animation: jump 1s steps(7) 1;
   }
   
   .walk {
-    translate: 0 -68px;
+    translate: var(--init-x-pos) -68px;
     animation: walk 1s steps(3) infinite;
   }
   
   .run {
-    translate: 0 -99px;
+    translate: var(--init-x-pos) -99px;
     animation: run 1s steps(7) infinite;
   }
   
   @keyframes run {
     to {
-      translate: -224px -99px;
+      translate: calc(-224px + var(--init-x-pos)) -99px;
     }
   }
   
   @keyframes walk {
     to {
-      translate: -96px -68px;
+      translate: calc(-96px + var(--init-x-pos)) -68px;
     }
   }
   
   @keyframes jump {
     to {
-      translate: -224px -161px;
+      translate: calc(-224px + var(--init-x-pos)) -161px;
     }
   }
   
@@ -68,21 +69,21 @@
     28.6%,
     85.7%
     {
-      translate: 0 -3px
+      translate: var(--init-x-pos) -3px
     }
     /* legs bend down */
     14.3%,
     42.9%,
     100%
     {
-      translate: -32px -3px
+      translate: calc(-32px + var(--init-x-pos)) -3px
     }
     /* eyes start to close */
     57.1% {
-      translate: 0 -35px
+      translate: var(--init-x-pos) -35px
     }
     /* eyes closed */
     71.4% {
-      translate: -32px -35px
+      translate: calc(-32px + var(--init-x-pos)) -35px
     }
   }
