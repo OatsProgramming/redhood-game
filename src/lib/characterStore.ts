@@ -12,9 +12,9 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         const div = get().character!
         const animation = get().animation
         const isGoing = get().isGoing
-        const currentPos = get().getCurrentPos(div)
+        const currentPos = get().getCurrentPos()
         const timerId = get().timerId
-
+        
         div.style.setProperty('--duration', '200ms')
 
         let moveX = 0
@@ -94,7 +94,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         const isGoing = get().isGoing
         const timerId = get().timerId
         const div = get().character!
-        const currentPos = get().getCurrentPos(div)
+        const currentPos = get().getCurrentPos()
         // Not pageX | pageY: only care about client window
         const newPos = {
             x: e.clientX - div.offsetWidth / 2,
@@ -150,8 +150,9 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     },
     setCharacter: (el) => set({ character: el }),
     setAnimation: (action) => set({ animation: action }),
-    setInitPos: (init) => set({ move: init }),
-    getCurrentPos: (char) => {
+    setCharPos: (pos) => set({ move: pos }),
+    getCurrentPos: () => {
+        const char = get().character!
         // Get position while transitioning (if goHere() called first)
         // use computed to get current pos (el.style will give end result rather in btwn)
         const computedChar = getComputedStyle(char)

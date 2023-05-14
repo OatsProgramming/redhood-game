@@ -18,6 +18,20 @@ type CharacterAction = {
     goHere: (e: PointerEvent) => void,
     setCharacter: (el: HTMLDivElement | null) => void,
     setAnimation: (action: AnimNames) => void,
-    setInitPos: (init: Position) => void,
-    getCurrentPos: (el: HTMLDivElement) => Position
+    setCharPos: (pos: Position) => void,
+    getCurrentPos: () => Position
+}
+
+type ObstacleState = {
+    obstacle: HTMLDivElement | null,
+    collidedSide: 'left' | 'right' | 'bottom' | 'top'
+}
+
+type ObstacleAction = {
+    checkCollision: (
+        char: HTMLDivElement, 
+        setInitPos: (init: Position) => void, 
+        getCurrentPos: () => Position
+    ) => void,
+    setObstacle: (obstacle: HTMLDivElement) => void,
 }

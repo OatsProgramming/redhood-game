@@ -5,6 +5,7 @@
     position: fixed;
     scale: 2;
     transition: left var(--duration) ease, top var(--duration) ease;
+    border: 1px solid green
   }
   
   /* initial translate: 0 -3px*/
