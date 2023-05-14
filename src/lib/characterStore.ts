@@ -6,24 +6,35 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     animation: 'stand',
     move: { x: 0, y: 0 },
     isGoing: false,
-    timerId: null,
+    firstTimer: null,
+    // firstTimer does not clearTimeout the second one automatically if
+    // firstTimer has finished executing
+    secondTimer: null,
     // If user is using keys to interact
     changeAnimation: (e) => {
         const div = get().character!
         const animation = get().animation
         const isGoing = get().isGoing
         const currentPos = get().getCurrentPos()
-        const timerId = get().timerId
-        
+        const firstTimer = get().firstTimer
+        const secondTimer = get().secondTimer
+
         div.style.setProperty('--duration', '200ms')
 
         let moveX = 0
         let moveY = 0
 
         // if goHere() called first, stop that animation
-        if (isGoing && timerId) {
-            clearTimeout(timerId)
-            set({ isGoing: false, move: currentPos, timerId: null })
+        if (isGoing && firstTimer) {
+            clearTimeout(firstTimer)
+            if (secondTimer) clearTimeout(secondTimer)
+
+            set({
+                isGoing: false,
+                move: currentPos,
+                firstTimer: null,
+                secondTimer: null
+            })
         }
         // Determine the speed
         if (e.key.includes('Arrow')) {
@@ -38,7 +49,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
             }
         } else if (e.code === 'Space') {
             animation !== 'jump' && set({ animation: 'jump' })
-        } 
+        }
 
         // Determine the direction
         switch (e.key) {
@@ -92,7 +103,8 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     // If user wants to tap the screen
     goHere: (e) => {
         const isGoing = get().isGoing
-        const timerId = get().timerId
+        const firstTimer = get().firstTimer
+        const secondTimer = get().secondTimer
         const div = get().character!
         const currentPos = get().getCurrentPos()
         // Not pageX | pageY: only care about client window
@@ -100,20 +112,20 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
             x: e.clientX - div.offsetWidth / 2,
             y: e.clientY - div.offsetHeight / 2,
         }
-        
+
         // Check to see if there's an active transition
         if (isGoing) {
             const desiredPos = get().move
             // If user clicked on the same spot stop the callback 
             if (isEqual(newPos, desiredPos)) return
             // If clicked at a different spot, trash the timer to lower memory
-            else if (timerId) {
-                clearTimeout(timerId)
-                set({ timerId: null })
+            else if (firstTimer) {
+                clearTimeout(firstTimer)
+                if (secondTimer) clearTimeout(secondTimer)
+                set({ firstTimer: null, secondTimer: null })
             }
-
             set({ move: currentPos })
-        } 
+        }
 
         // Get the distance btwn current position and place of interest
         const distance = Math.sqrt(
@@ -136,13 +148,14 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         // Schedule a separate macrotask to let goHere() be considered finished
         // This will help with setStates
         const id = setTimeout(() => {
-            set({ animation: 'walk' })
-            setTimeout(() => {
+            const secondId = setTimeout(() => {
                 set({ animation: 'stand', isGoing: false })
             }, (durationPointer * (1 / 3)))
+
+            set({ animation: 'walk', secondTimer: secondId })
         }, (durationPointer * (2 / 3)))
 
-        set({ timerId: id })
+        set({ firstTimer: id })
     },
     // Neutral animation
     toStand: (e) => {

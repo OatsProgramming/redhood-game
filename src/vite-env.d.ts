@@ -9,7 +9,8 @@ type CharacterState = {
     animation: AnimNames,
     move: Position,
     isGoing: boolean,
-    timerId: number | null
+    firstTimer: number | null,
+    secondTimer: number | null,
 }
 
 type CharacterAction = {
