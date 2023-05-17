@@ -25,14 +25,19 @@ type CharacterAction = {
 
 type ObstacleState = {
     obstacle: HTMLDivElement | null,
-    collidedSide: 'left' | 'right' | 'bottom' | 'top'
+    sideX: 'left' | 'right' | null
+    sideY: 'top' | 'bottom' | null
 }
 
 type ObstacleAction = {
     checkCollision: (
-        char: HTMLDivElement, 
-        setInitPos: (init: Position) => void, 
-        getCurrentPos: () => Position
+        charStore: CharacterAction & CharacterState,
+        e?: PointerEvent
     ) => void,
     setObstacle: (obstacle: HTMLDivElement) => void,
 }
+
+type Line = {
+    ptOne: Position,
+    ptTwo: Position
+  }

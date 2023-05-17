@@ -102,6 +102,9 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     },
     // If user wants to tap the screen
     goHere: (e) => {
+        // Prevent char from traveling if screen pop up, obstacle, etc.
+        if (e.target !== document.body) return
+
         const isGoing = get().isGoing
         const firstTimer = get().firstTimer
         const secondTimer = get().secondTimer
@@ -145,7 +148,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
         // Start transition
         set({ animation: 'run', move: newPos, isGoing: true })
 
-        // Schedule a separate macrotask to let goHere() be considered finished
+        // Schedule a separate macrotask to let goHere() be considered finished from macrotask queue
         // This will help with setStates
         const id = setTimeout(() => {
             const secondId = setTimeout(() => {
