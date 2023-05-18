@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import doIntersect from "./util/doIntersect";
-import charLocator from "./util/charLocator";
+import doIntersect from "../util/doIntersect";
+import charLocator from "../util/charLocator";
 
 const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
     obstacle: null,
@@ -51,6 +51,8 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             y: currentCharPos.y + y
         })
     },
+    // Instead of checking for a collision when it occurs
+    // Predict possible collisions 
     pointerCollision: (charStore: CharacterAction & CharacterState, e: PointerEvent) => {
         const { character: char, setCharPos, getCurrentPos } = charStore
         if (!char) return
@@ -107,14 +109,14 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
         if (intersectionX.point) {
             let y = (charRect.height / 2)
             if (sideY === 'top') y = -(charRect.height) + 10
-                
+
             setCharPos({
                 ...intersectionX.point,
                 y: intersectionX.point.y + y
             })
         } else if (intersectionY.point) {
             let x = charRect.width
-            if (sideX === 'left')  x *= -1
+            if (sideX === 'left') x *= -1
 
             setCharPos({
                 ...intersectionY.point,

@@ -1,11 +1,11 @@
 import { useRef, useEffect } from 'react'
 import './character.css'
-import useCharacter from '../../lib/characterStore'
+import useCharacter from '../../lib/zustand/characterStore'
 
 export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
   const { move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
-  
+
   useEffect(() => {
     // Set initial character location at the middle
     const windowCenter = {
@@ -38,7 +38,7 @@ export default function Character() {
       }}>
       <img
         className={animation}
-        src='/character.png'
+        src='/character2.png'
       />
     </div>
   )
