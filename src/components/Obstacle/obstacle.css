@@ -4,6 +4,7 @@
     position: fixed;
     top: 20vh;
     left: 25vh;
+    /* border: 5px solid green */
 }
 
 .container > img {
