@@ -29,7 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  /* background-image: url('/shop.png'); */
+  background-image: url('https://opengameart.org/sites/default/files/styles/medium/public/grass14.png');
   /* background-size: contain; */
 }
 
