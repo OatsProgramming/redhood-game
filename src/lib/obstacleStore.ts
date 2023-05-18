@@ -1,70 +1,73 @@
 import { create } from "zustand";
-import intersect2DSegs from "./util/doIntersect";
+import doIntersect from "./util/doIntersect";
+import charLocator from "./util/charLocator";
 
 const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
     obstacle: null,
-    sideX: 'left',
-    sideY: 'top',
-    checkCollision: (charStore, e) => {
-        // char, setCharPos, getCurrentPos, move
-        const { character: char, setCharPos, getCurrentPos, move } = charStore
-        let pointerPos = {} as Position
-        if (e){
-            pointerPos = {
-                x: e.clientX,
-                y: e.clientY
-            }
-        }
-
+    keyCollision: (charStore) => {
+        const { character: char, setCharPos, getCurrentPos } = charStore
         if (!char) return
 
         const charRect = char.getBoundingClientRect()
         const obsRect = get().obstacle?.getBoundingClientRect()!
-        // const collidedSide = get().
-        const sideX = get().sideX
-        const sideY = get().sideY
+        const { sideX, sideY } = charLocator(charRect, obsRect)
         const currentCharPos = getCurrentPos()
+        const rangeBuffer = 15
 
-        const computedChar = getComputedStyle(char)
-        const computedObs = getComputedStyle(get().obstacle!)
+        // Collision detection
+        if (!(
+            charRect.left < obsRect.right + rangeBuffer &&
+            charRect.right > obsRect.left - rangeBuffer &&
+            charRect.top < obsRect.bottom + rangeBuffer &&
+            charRect.bottom > obsRect.top - rangeBuffer
+        )) return
 
-        // Before collision detection, check which side the character was on
-        // Tried during and after collision: does not work whatsoever. DO NOT ATTEMPT
-
-
-        // Note to self in the morning:
-        // Possibility of being on the bottom right of the obsRect and so on
-        // Do something about that when you get the chance
-        // Y-Axis
-        if (charRect.bottom < obsRect.top) {
-            sideY !== 'top' && set({ sideY: 'top' })
-        } else if (charRect.top > obsRect.bottom) {
-            sideY !== 'bottom' && set({ sideY: 'bottom' })
-        } else {
-            sideY !== null && set({ sideY: null })
+        // Determine the bounce back for collision
+        let x = 0
+        let y = 0
+        switch (sideX) {
+            case 'left': {
+                x = -rangeBuffer
+                break;
+            }
+            case 'right': {
+                x = rangeBuffer
+                break;
+            }
+        }
+        switch (sideY) {
+            case 'top': {
+                y = -rangeBuffer
+                break;
+            }
+            case 'bottom': {
+                y = rangeBuffer
+                break;
+            }
         }
 
-        console.log(sideY)
-        
-        // X-Axis
-        if (charRect.right < obsRect.left) {
-            sideX !== 'left' && set({ sideX: 'left' })
-        } else if (charRect.left > obsRect.right) {
-            sideX !== 'right' && set({ sideX: 'right' })
-        } else {
-            sideX !== null && set({ sideX: null })
+        setCharPos({
+            x: currentCharPos.x + x,
+            y: currentCharPos.y + y
+        })
+    },
+    pointerCollision: (charStore: CharacterAction & CharacterState, e: PointerEvent) => {
+        const { character: char, setCharPos, getCurrentPos } = charStore
+        if (!char) return
+
+        const obsRect = get().obstacle?.getBoundingClientRect()!
+        const charRect = char.getBoundingClientRect()
+        const { sideX, sideY } = charLocator(charRect, obsRect)
+
+        let lineX: Line | undefined;
+        let lineY: Line | undefined;
+        const charLine: Line = {
+            ptOne: getCurrentPos(),
+            ptTwo: {
+                x: e.clientX,
+                y: e.clientY
+            }
         }
-
-        console.log(sideX)
-
-        let charLine: Line = {
-            ptOne: currentCharPos,
-            ptTwo: pointerPos
-        }
-
-        console.log(charLine)
-        let lineX: Line | null = null
-        let lineY: Line | null = null
 
         if (sideX) {
             lineY = {
@@ -91,102 +94,14 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
                 }
             }
         }
-        
-        const isIntersectingX = intersect2DSegs(charLine, lineX)
-        const isIntersectingY = intersect2DSegs(charLine, lineY)
 
-        console.log(isIntersectingX)
-        console.log(isIntersectingY)
+        const intersectionX = doIntersect(charLine, lineX)
+        const intersectionY = doIntersect(charLine, lineY)
 
-        if (isIntersectingX.type !== 'none') {
-            setCharPos(isIntersectingX.point)
-        } else if (isIntersectingY.type !== 'none') {
-            setCharPos(isIntersectingY.point)
-        }
-
-    //     const intersectsHere = pointOfIntersection(
-    //         {
-    //             ptOne: {
-    //                 x: parseInt(computedChar.left),
-    //                 y: parseInt(computedChar.top)
-    //             },
-    //             ptTwo: {
-    //                 x: move.x,
-    //                 y: move.y
-    //             }
-    //         },
-    //         lineTwo
-    //     )
-    //    const timerId = setTimeout(function tick() {
-    //     let timerIdd
-    //     if (!(charRect.left < obsRect.right &&
-    //         charRect.right > obsRect.left &&
-    //         charRect.top < obsRect.bottom &&
-    //         charRect.bottom > obsRect.top)) {
-    //             console.log('no')
-    //             timerIdd = setTimeout(tick, 100)
-    //             return
-    //         }
-    //         else {
-    //             console.log('yes')
-    //             clearTimeout(timerId)
-    //             if (timerIdd) clearTimeout(timerIdd)
-    //         }
-    //    }, 100)
-    // setTimeout(() => {
-
-    // })
-        // Just bounce back user
-
-        // if (intersectsHere) {
-        //     setCharPos(intersectsHere)
-        //     return
-        // }
-
-        const rangeBuffer = 10
-        // Collision detection
-        if (!(charRect.left < obsRect.right + rangeBuffer &&
-            charRect.right > obsRect.left - rangeBuffer &&
-            charRect.top < obsRect.bottom + rangeBuffer &&
-            charRect.bottom > obsRect.top - rangeBuffer)) return
-        
-        switch (sideX) {
-            case 'left': {
-                setCharPos({
-                    ...currentCharPos,
-                    x: currentCharPos.x - rangeBuffer
-                })
-                break;
-            }
-            case 'right': {
-                setCharPos({
-                    ...currentCharPos,
-                    x: currentCharPos.x + rangeBuffer
-                })
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        switch (sideY) {
-            case 'top': {
-                setCharPos({
-                    ...currentCharPos,
-                    y: currentCharPos.y - rangeBuffer
-                })
-                break;
-            }
-            case 'bottom': {
-                setCharPos({
-                    ...currentCharPos,
-                    y: currentCharPos.y + rangeBuffer
-                })
-                break;
-            }
-            default: {
-                break;
-            }
+        if (intersectionX.point) {
+            setCharPos(intersectionX.point)
+        } else if (intersectionY.point) {
+            setCharPos(intersectionY.point)
         }
     },
     // On init

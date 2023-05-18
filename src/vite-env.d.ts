@@ -24,20 +24,21 @@ type CharacterAction = {
 }
 
 type ObstacleState = {
-    obstacle: HTMLDivElement | null,
-    sideX: 'left' | 'right' | null
-    sideY: 'top' | 'bottom' | null
+    obstacle: HTMLDivElement | null
 }
 
 type ObstacleAction = {
-    checkCollision: (
-        charStore: CharacterAction & CharacterState,
-        e?: PointerEvent
-    ) => void,
+    keyCollision: (charStore: CharacterAction & CharacterState) => void,
+    pointerCollision: (charStore: CharacterAction & CharacterState, e: PointerEvent) => void,
     setObstacle: (obstacle: HTMLDivElement) => void,
 }
 
 type Line = {
     ptOne: Position,
     ptTwo: Position
-  }
+}
+
+type Intersect = {
+    type: 'none' | 'intersecting' | 'parallel' | 'colinear',
+    point?: Position
+}
