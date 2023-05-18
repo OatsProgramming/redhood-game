@@ -1,90 +1,90 @@
 .charBox {
-    --init-x-pos: 0px;
-    /* overflow: hidden; */
-    width: 71px;
-    height: 100px;
+    --buffer: 6px;
+    --frameDistance: -117px;
+    overflow: hidden;
+    width: 75px;
+    height: 110px;
     position: fixed;
     scale: 1;
     transition: left var(--duration) ease, top var(--duration) ease;
-    border: 5px solid green;
+    filter: drop-shadow(0px 30px 20px #000);
+    /* border: 1px solid green; */
   }
   
-  /* initial translate: var(--init-x-pos) -3px*/
-  /* For every different animation go down by 32px ish ( add the three ) */
-  
-  /* -32px per frame when animating */
+  /* -117px per frame when animating */
   /* steps = frames.length - 1 */
   
   .charBox > img {
     position: absolute;
-    /* translate: -117px */
   }
   
   .turnLeft {
     transform: scaleX(-1);
   }
   
-  /* .stand {
-    translate: var(--init-x-pos) -3px;
+  .stand {
+    translate: 0 0;
     animation: stand 3s steps(1) infinite;
-  } */
+  }
   
   .jump {
-    translate: var(--init-x-pos) -161px;
+    translate: calc(var(--frameDistance) * 0) calc(var(--frameDistance) * 4.85);
     animation: jump 1s steps(7) 1;
   }
   
   .walk {
-    translate: var(--init-x-pos) -68px;
+    translate: 0 calc(var(--frameDistance) * 1.95);
     animation: walk 1s steps(3) infinite;
   }
   
   .run {
-    translate: var(--init-x-pos) -99px;
+    translate: 0 calc(var(--frameDistance) * 2.95);
     animation: run 1s steps(7) infinite;
   }
   
+  /* translate: 
+  (x) LAST_FRAME        --> (frameDistance * lastFrameIndex) + buffer
+  (y) ANIMATION_CYCLE   --> Not rounded to whole number; exact sprite measurements unknown
+  */
   @keyframes run {
     to {
-      translate: calc(-224px + var(--init-x-pos)) -99px;
+      translate: calc(calc(var(--frameDistance) * 7) + var(--buffer)) calc(var(--frameDistance) * 2.95);
     }
   }
   
   @keyframes walk {
     to {
-      translate: calc(-96px + var(--init-x-pos)) -68px;
+      translate: calc(calc(var(--frameDistance) * 3) + var(--buffer)) calc( var(--frameDistance) * 1.95);
     }
   }
   
   @keyframes jump {
     to {
-      translate: calc(-224px + var(--init-x-pos)) -161px;
+      translate: calc(calc(var(--frameDistance) * 7) + var(--buffer)) calc(var(--frameDistance) * 4.85);
     }
   }
   
-  /* 100 (percentage) % 8 (frames) => 14.3  */
-  /* 0  14.3  28.6  42.9  57.1  71.4  85.7  100 */
   @keyframes stand {
     /* initial */
     0%,
     28.6%,
     85.7%
     {
-      translate: var(--init-x-pos) -3px
+      translate: 0 0
     }
     /* legs bend down */
     14.3%,
     42.9%,
     100%
     {
-      translate: calc(calc(-32px + var(--init-x-pos)) * 3.55) calc(-3px * 3.55)
+      translate: var(--frameDistance) 0
     }
     /* eyes start to close */
     57.1% {
-      translate: var(--init-x-pos) -35px
+      translate: 0 var(--frameDistance)
     }
     /* eyes closed */
     71.4% {
-      translate: calc(calc(-32px + var(--init-x-pos)) * 3.55) calc(-35px * 3.55)
+      translate: var(--frameDistance) var(--frameDistance)
     }
   }
