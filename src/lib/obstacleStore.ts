@@ -69,7 +69,9 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             }
         }
 
+        // User is either left or right of obstacle
         if (sideX) {
+            // Check lines that go vertically
             lineY = {
                 ptOne: {
                     x: obsRect[sideX],
@@ -82,7 +84,9 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             }
         }
 
+        // User is either top or bottom of obstacle
         if (sideY) {
+            // Check lines that go horizontally
             lineX = {
                 ptOne: {
                     x: obsRect.left,
@@ -95,13 +99,27 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             }
         }
 
+        // Looking out for an intersection for two sides of the obstacle:
+        // If user is at a given distance, only has two sides of the obstacle when choosing
         const intersectionX = doIntersect(charLine, lineX)
         const intersectionY = doIntersect(charLine, lineY)
 
         if (intersectionX.point) {
-            setCharPos(intersectionX.point)
+            let y = (charRect.height / 2)
+            if (sideY === 'top') y = -(charRect.height) + 10
+                
+            setCharPos({
+                ...intersectionX.point,
+                y: intersectionX.point.y + y
+            })
         } else if (intersectionY.point) {
-            setCharPos(intersectionY.point)
+            let x = charRect.width
+            if (sideX === 'left')  x *= -1
+
+            setCharPos({
+                ...intersectionY.point,
+                x: intersectionY.point.x + x
+            })
         }
     },
     // On init
