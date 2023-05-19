@@ -18,7 +18,7 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
         if (!(
             charRect.left < obsRect.right + rangeBuffer &&
             charRect.right > obsRect.left - rangeBuffer &&
-            charRect.top < obsRect.bottom + rangeBuffer &&
+            charRect.bottom < obsRect.bottom + rangeBuffer &&
             charRect.bottom > obsRect.top - rangeBuffer
         )) return
 
@@ -50,6 +50,7 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             x: currentCharPos.x + x,
             y: currentCharPos.y + y
         })
+
     },
     // Instead of checking for a collision when it occurs
     // Predict possible collisions 

@@ -1,7 +1,9 @@
 import useObstacle from "../../lib/zustand/obstacleStore"
 import { CSSProperties, useEffect, useRef } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
+import Lottie from "lottie-react";
 import './obstacle.css'
+import textBubble from '../../../public/textBubble.json'
 
 export default function Obstacle({ image, style }: {
     image: string,
@@ -9,6 +11,7 @@ export default function Obstacle({ image, style }: {
 }) {
     const charStore = useCharacter()
     const divRef = useRef<HTMLDivElement>(null)
+    const lottieRef = useRef(null)
     const { keyCollision, pointerCollision, setObstacle } = useObstacle()
 
     useEffect(() => {
@@ -38,11 +41,28 @@ export default function Obstacle({ image, style }: {
     }, [charStore.character])
 
     useEffect(() => {
+        const obs = divRef.current
+        const char = charStore.character
+        if (!char || !obs) return
+
+        const obsRect = obs.getBoundingClientRect()
+        const charRect = char.getBoundingClientRect()
         
-    }, [charStore.move])
+        // Behind char
+        if (charRect.bottom > obsRect.bottom) char.style.zIndex = '1' 
+        // In front of char
+        else char.style.zIndex = '0'
+
+    }, [charStore.character, charStore.move])
     return (
-        <div className="container" ref={divRef} style={style}>
+        <div className="container" ref={divRef}>
+            {/* <Lottie 
+                lottieRef={lottieRef}
+                animationData={textBubble}
+                loop={false}
+            /> */}
             <img
+                className="obstacle"
                 src={image}
             />
         </div>

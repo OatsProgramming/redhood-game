@@ -4,7 +4,7 @@ export default function charLocator(charRect: DOMRect, obsRect: DOMRect) {
     // Y-Axis
     let sideY: 'top' | 'bottom' | undefined;
     if (charRect.bottom < obsRect.top) sideY = 'top'
-    else if (charRect.top > obsRect.bottom) sideY = 'bottom'
+    else if (charRect.bottom > obsRect.bottom) sideY = 'bottom'
 
     // X-Axis
     let sideX: 'left' | 'right' | undefined;
