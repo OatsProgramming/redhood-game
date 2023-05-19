@@ -139,6 +139,7 @@ export default function Obstacle({ image, style }: {
 
     return (
         <div className="container" ref={obsRef} style={style}>
+            <div className="shadow" />
             <Lottie
                 className={lottieClass}
                 lottieRef={lottieRef}
