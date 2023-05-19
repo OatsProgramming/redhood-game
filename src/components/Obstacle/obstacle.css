@@ -12,10 +12,13 @@
     /* filter: drop-shadow(1px 20px 20px #000); */
     translate: 0px -90px;
     position: absolute;
+    border: 5px solid red;
+
 }
 
 .textBubble {
    position: absolute;
    top: -170px;
    left: -10px;
+   border: 5px solid red;
 }

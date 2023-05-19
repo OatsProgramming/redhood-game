@@ -101,14 +101,14 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
                 }
             }
         }
-
+        
         // Looking out for an intersection for two sides of the obstacle:
         // If user is at a given distance, only has two sides of the obstacle when choosing
         const intersectionX = doIntersect(charLine, lineX)
         const intersectionY = doIntersect(charLine, lineY)
 
         if (intersectionX.point) {
-            let y = 30
+            let y = (charRect.height / 100)
             if (sideY === 'top') y = -(charRect.height) - 10
 
             setCharPos({

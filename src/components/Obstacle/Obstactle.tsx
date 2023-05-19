@@ -1,5 +1,5 @@
 import useObstacle from "../../lib/zustand/obstacleStore"
-import { CSSProperties, useEffect, useRef, useState } from "react"
+import { CSSProperties, HTMLProps, useEffect, useRef, useState } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
@@ -13,10 +13,13 @@ export default function Obstacle({ image, style }: {
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
 }) {
     const charStore = useCharacter()
-    const obsRef = useRef<HTMLDivElement>(null)
-    const [isCharNear, setIsCharNear] = useState(false)
-    const lottieRef = useRef<LottieRefCurrentProps>(null)
     const { keyCollision, pointerCollision, setObstacle } = useObstacle()
+
+    const obsRef = useRef<HTMLDivElement>(null)
+    const lottieRef = useRef<LottieRefCurrentProps>(null)
+    const dialogRef = useRef<HTMLDialogElement>(null)
+
+    const [isCharNear, setIsCharNear] = useState(false)
 
     // For collision
     useEffect(() => {
@@ -41,8 +44,8 @@ export default function Obstacle({ image, style }: {
             window.removeEventListener('keydown', collisionDetection)
             document.documentElement.removeEventListener('pointerdown', collisionDetection)
         }
-    // Don't add charStore.move as a dependency here
-    // Will constantly create add/removeEventListeners 
+        // Don't add charStore.move as a dependency here
+        // Will constantly create add/removeEventListeners 
     }, [charStore.character])
 
     // Check if character is near
@@ -56,7 +59,7 @@ export default function Obstacle({ image, style }: {
 
         // For 3D effect
         // Behind char
-        if (charRect.bottom > obsRect.bottom) char.style.zIndex = '1' 
+        if (charRect.bottom > obsRect.bottom) char.style.zIndex = '1'
         // In front of char
         else char.style.zIndex = '0'
 
@@ -64,7 +67,7 @@ export default function Obstacle({ image, style }: {
         const buffer = 30
         const { sideX, sideY } = charLocator(charRect, obsRect)
         let isNearX: boolean;
-        let isNearY: boolean; 
+        let isNearY: boolean;
         switch (sideX) {
             case 'left': {
                 isNearX = (charRect.right > obsRect.left - buffer)
@@ -73,7 +76,7 @@ export default function Obstacle({ image, style }: {
             case 'right': {
                 isNearX = (charRect.left < obsRect.right + buffer)
                 break;
-            } 
+            }
             default: {
                 // User can be on just one side 
                 // If on sideY only, ignore this axis (set to true) 
@@ -104,8 +107,8 @@ export default function Obstacle({ image, style }: {
 
     }, [charStore.character, charStore.isGoing, charStore.move])
 
-    // Text bubble animation
-    useEffect(() => {        
+    // Text bubble animation & modal
+    useEffect(() => {
         const lottie = lottieRef.current
         if (!lottie) return
 
@@ -117,11 +120,25 @@ export default function Obstacle({ image, style }: {
             lottie.goToAndPlay(22, true)
         }
 
+        function interactModal(e: KeyboardEvent) {
+            const dialog = dialogRef.current
+            if (e.code !== 'KeyQ' || !dialog) return
+            if (isCharNear) {
+                !dialog.open && dialog.showModal()
+            }
+        }
+
+        window.addEventListener('keydown', interactModal)
+        return () => {
+            window.removeEventListener('keydown', interactModal)
+        }
     }, [isCharNear])
 
     return (
         <div className="container" ref={obsRef} style={style}>
-             <Lottie 
+            <Lottie
+                // Prevent animation on initial load
+                onDOMLoaded={() => lottieRef.current?.stop()}
                 className="textBubble"
                 lottieRef={lottieRef}
                 animationData={textBubble}
@@ -131,6 +148,12 @@ export default function Obstacle({ image, style }: {
                 className="obstacle"
                 src={image}
             />
+            <dialog ref={dialogRef}>
+                <p>Greetings, one and all!</p>
+                <form method="dialog">
+                    <button>OK</button>
+                </form>
+            </dialog>
         </div>
     )
 }
