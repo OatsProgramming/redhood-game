@@ -17,11 +17,11 @@ export default function Character() {
 
     window.addEventListener('keydown', changeAnimation)
     window.addEventListener('keyup', toStand)
-    document.documentElement.addEventListener('pointerdown', goHere)
+    document.body.addEventListener('pointerdown', goHere)
     return () => {
       window.removeEventListener('keydown', changeAnimation)
       window.removeEventListener('keyup', toStand)
-      document.documentElement.removeEventListener('pointerdown', goHere)
+      document.body.removeEventListener('pointerdown', goHere)
     }
   }, [])
 

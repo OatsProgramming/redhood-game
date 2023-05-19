@@ -20,6 +20,8 @@ export default function Obstacle({ image, style }: {
     const dialogRef = useRef<HTMLDialogElement>(null)
 
     const [isCharNear, setIsCharNear] = useState(false)
+    // Can't directly use .style for some reason (readonly)
+    const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
 
     // For collision
     useEffect(() => {
@@ -113,6 +115,7 @@ export default function Obstacle({ image, style }: {
         if (!lottie) return
 
         if (isCharNear) {
+            setLottieClass('textBubble')
             lottie.setDirection(1)
             lottie.playSegments([0, 22], true)
         } else {
@@ -137,12 +140,14 @@ export default function Obstacle({ image, style }: {
     return (
         <div className="container" ref={obsRef} style={style}>
             <Lottie
-                // Prevent animation on initial load
-                onDOMLoaded={() => lottieRef.current?.stop()}
-                className="textBubble"
+                className={lottieClass}
                 lottieRef={lottieRef}
                 animationData={textBubble}
                 loop={false}
+                // Prevent animation on initial load
+                onDOMLoaded={() => lottieRef.current?.stop()}
+                // Ensures that the animation gets to play then safely remove the element
+                onComplete={() => !isCharNear && setLottieClass('none')}
             />
             <img
                 className="obstacle"
