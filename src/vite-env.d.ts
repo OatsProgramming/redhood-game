@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-
 type AnimNames = 'stand' | 'walk' | 'run' | 'jump'
 
 type Position = { x: number, y: number }
@@ -43,5 +42,7 @@ type Intersect = {
     point?: Position
 }
 
-type ReqCSS = 'width' | 'height' | 'top' | 'left'
-type RequiredStyles = Record<ReqCSS, string | number>
+type ReqCSS = 'top' | 'left'
+type RequiredStyles = Record<ReqCSS, string | number>  & {
+    scale?: string
+}

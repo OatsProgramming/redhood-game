@@ -7,7 +7,9 @@ import textBubble from '../../../public/textBubble.json'
 
 export default function Obstacle({ image, style }: {
     image: string,
-    style: RequiredStyles & CSSProperties
+    // Don't mess with width or height: treat all objects present in window as paper cutouts
+    // Use scale only for resizing; otherwise, will affect the collision borders
+    style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
 }) {
     const charStore = useCharacter()
     const divRef = useRef<HTMLDivElement>(null)
@@ -55,7 +57,7 @@ export default function Obstacle({ image, style }: {
 
     }, [charStore.character, charStore.move])
     return (
-        <div className="container" ref={divRef}>
+        <div className="container" ref={divRef} style={style}>
             {/* <Lottie 
                 lottieRef={lottieRef}
                 animationData={textBubble}

@@ -1,3 +1,4 @@
+/* Don't mess with width or height: treat all objects present in window as paper cutouts */
 .container {
     position: fixed;
     border: 5px solid red;
@@ -7,7 +8,6 @@
 
 .container>.obstacle {
     width: 100%;
-    /* height: 100%; */
     filter: drop-shadow(1px 20px 20px #000);
     translate: 0px -90px;
     position: absolute;

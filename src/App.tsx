@@ -17,10 +17,9 @@ export default function App() {
       <Obstacle 
         image='/woodenCart.PNG'
         style={{
-          width: '220px',
-          height: '220px',
-          top: '20vh',
+          top: '40vh',
           left: '25vh',
+          scale: '2'
         }}
       />
     </>
