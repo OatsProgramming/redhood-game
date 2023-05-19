@@ -42,3 +42,6 @@ type Intersect = {
     type: 'none' | 'intersecting' | 'parallel' | 'colinear',
     point?: Position
 }
+
+type ReqCSS = 'width' | 'height' | 'top' | 'left'
+type RequiredStyles = Record<ReqCSS, string | number>

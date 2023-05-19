@@ -1,9 +1,12 @@
 import useObstacle from "../../lib/zustand/obstacleStore"
-import { useEffect, useRef } from "react"
-import './obstacle.css'
+import { CSSProperties, useEffect, useRef } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
+import './obstacle.css'
 
-export default function Obstacle() {
+export default function Obstacle({ image, style }: {
+    image: string,
+    style: RequiredStyles & CSSProperties
+}) {
     const charStore = useCharacter()
     const divRef = useRef<HTMLDivElement>(null)
     const { keyCollision, pointerCollision, setObstacle } = useObstacle()
@@ -32,9 +35,9 @@ export default function Obstacle() {
         }
     }, [charStore.character])
     return (
-        <div className="container" ref={divRef}>
+        <div className="container" ref={divRef} style={style}>
             <img
-                src='/woodenCart.PNG'
+                src={image}
             />
         </div>
     )
