@@ -47,7 +47,6 @@ export default function Obstacle({ image, style }: {
 
     // Check if character is near
     useEffect(() => {
-        console.log('asd')
         const obs = obsRef.current
         const char = charStore.character
         if (!char || !obs) return
@@ -105,28 +104,28 @@ export default function Obstacle({ image, style }: {
 
     }, [charStore.character, charStore.isGoing, charStore.move])
 
-    // Text bubble
+    // Text bubble animation
     useEffect(() => {        
+        const lottie = lottieRef.current
+        if (!lottie) return
+
         if (isCharNear) {
-            lottieRef.current?.setDirection(1)
-            lottieRef.current?.playSegments([0, 22], true)
+            lottie.setDirection(1)
+            lottie.playSegments([0, 22], true)
         } else {
-            lottieRef.current?.setDirection(-1)
-            lottieRef.current?.goToAndPlay(22, true)
+            lottie.setDirection(-1)
+            lottie.goToAndPlay(22, true)
         }
+
     }, [isCharNear])
 
     return (
         <div className="container" ref={obsRef} style={style}>
-            
              <Lottie 
-                // onDOMLoaded={() => lottieRef.current?.goToAndStop(0, true)}
+                className="textBubble"
                 lottieRef={lottieRef}
                 animationData={textBubble}
                 loop={false}
-                style={{
-                    position: 'absolute',
-                }}
             />
             <img
                 className="obstacle"

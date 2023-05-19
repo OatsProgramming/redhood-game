@@ -108,7 +108,7 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
         const intersectionY = doIntersect(charLine, lineY)
 
         if (intersectionX.point) {
-            let y = (charRect.height / 100)
+            let y = 30
             if (sideY === 'top') y = -(charRect.height) - 10
 
             setCharPos({

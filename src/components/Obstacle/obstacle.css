@@ -1,4 +1,5 @@
 /* Don't mess with width or height: treat all objects present in window as paper cutouts */
+/* Change via scale */
 .container {
     position: fixed;
     border: 5px solid red;
@@ -6,9 +7,15 @@
     height: 10px;
 }
 
-.container>.obstacle {
+.container > .obstacle {
     width: 100%;
-    filter: drop-shadow(1px 20px 20px #000);
+    /* filter: drop-shadow(1px 20px 20px #000); */
     translate: 0px -90px;
     position: absolute;
+}
+
+.textBubble {
+   position: absolute;
+   top: -170px;
+   left: -10px;
 }
