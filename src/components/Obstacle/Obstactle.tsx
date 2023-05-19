@@ -13,7 +13,7 @@ export default function Obstacle({ image, style }: {
 
     useEffect(() => {
         setObstacle(divRef.current!)
-        function something(e: KeyboardEvent | PointerEvent) {
+        function collisionDetection(e: KeyboardEvent | PointerEvent) {
             // Only care about character's movement
             if (e instanceof KeyboardEvent && !e.key.includes('Arrow')) return
             else if (e.target !== document.body) return
@@ -27,13 +27,19 @@ export default function Obstacle({ image, style }: {
             else keyCollision(charStore)
         }
 
-        window.addEventListener('keydown', something)
-        document.documentElement.addEventListener('pointerdown', something)
+        window.addEventListener('keydown', collisionDetection)
+        document.documentElement.addEventListener('pointerdown', collisionDetection)
         return () => {
-            window.removeEventListener('keydown', something)
-            document.documentElement.removeEventListener('pointerdown', something)
+            window.removeEventListener('keydown', collisionDetection)
+            document.documentElement.removeEventListener('pointerdown', collisionDetection)
         }
+    // Don't add charStore.move as a dependency here
+    // Will constantly create add/removeEventListeners 
     }, [charStore.character])
+
+    useEffect(() => {
+        
+    }, [charStore.move])
     return (
         <div className="container" ref={divRef} style={style}>
             <img
