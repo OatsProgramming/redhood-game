@@ -1,25 +1,25 @@
 import { useRef, useEffect } from 'react'
 import './character.css'
 import useCharacter from '../../lib/zustand/characterStore'
-import useDialog from '../../lib/zustand/dialogStore'
 
 export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
-  const { dialog } = useDialog()
-  const { move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
+  const { character, move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
 
   useEffect(() => {
-    // Set initial character location at the middle
     const windowCenter = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
     }
     setCharPos(windowCenter)
     setCharacter(divRef.current)
+  }, [])
 
+  useEffect(() => {
+    // Set initial character location at the middle
     function handleMovements(e: PointerEvent | KeyboardEvent) {
-      // Disable character movement
-      if (dialog?.open) return
+      // Check if character is connected (dialog.open ?)
+      if (!character) return
 
       if (e instanceof PointerEvent) goHere(e)
       else changeAnimation(e)
@@ -33,7 +33,7 @@ export default function Character() {
       window.removeEventListener('keyup', toStand)
       document.body.removeEventListener('pointerdown', handleMovements)
     }
-  }, [dialog])
+  }, [character])
 
   return (
     <div className='charBox'

@@ -13,30 +13,36 @@ export default function App() {
   return (
     <>
       <Character />
-      <Obstacle 
+      <Obstacle
         image='/woodenCart.PNG'
+        randomString="one"
         style={{
           top: '40vh',
           left: '25vh',
           scale: '2'
         }}
-      />
-      <Obstacle 
+     />  
+      
+      <Obstacle
         image='/woodenCart.PNG'
+        randomString="two"
         style={{
           top: '80vh',
           left: '25vh',
           scale: '2'
         }}
-      />
-      <Obstacle 
+     />
+      
+      <Obstacle
         image='/woodenCart.PNG'
+        randomString="three"
         style={{
           top: '20vh',
           left: '2vh',
           scale: '1'
         }}
       />
+       
     </>
   )
 }

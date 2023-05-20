@@ -1,21 +1,20 @@
-import { CSSProperties, useEffect, useRef, useState } from "react"
+import { CSSProperties, useCallback, useEffect, useRef, useState } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
 import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
-import useDialog from "../../lib/zustand/dialogStore";
 import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
 
-export default function Obstacle({ image, style }: {
+export default function Obstacle({ image, style, randomString }: {
     image: string,
+    randomString: string,
     // Don't mess with width or height: treat all objects present in window as paper cutouts
     // Use scale only for resizing; otherwise, will affect the collision borders
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
 }) {
     const charStore = useCharacter()
-    const { setDialog } = useDialog()
 
     const obsRef = useRef<HTMLDivElement>(null)
     const obsImgRef = useRef<HTMLImageElement>(null)
@@ -23,12 +22,31 @@ export default function Obstacle({ image, style }: {
     const dialogRef = useRef<HTMLDialogElement>(null)
 
     const [isCharNear, setIsCharNear] = useState(false)
+    const [charHolder, setCharHolder] = useState<HTMLDivElement | null>(null)
     // Can't directly use .style for some reason (readonly)
     const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
 
+    const handleModal = useCallback(function() {
+        const dialog = dialogRef.current
+        if (!dialog || !isCharNear) return
+
+        if (dialog.open) {
+            // Disconnect character to disable movement
+            charStore.setCharacter(charHolder)
+            setCharHolder(null)
+            dialog.close()
+        } else {
+            // Reconnect character to allow movement
+            setCharHolder(charStore.character)
+            charStore.setCharacter(null)
+            dialog.showModal()
+        }
+    }, [dialogRef.current?.open, isCharNear])
+
     // For collision
     useEffect(() => {
-        if (dialogRef.current) setDialog(dialogRef.current)
+        // if (!dialogRef.current) return
+        // setDialog(dialogRef.current)
 
         function collisionDetection(e: KeyboardEvent | PointerEvent) {
             if (!obsRef.current || !obsImgRef.current) return
@@ -138,7 +156,7 @@ export default function Obstacle({ image, style }: {
         function interactModal(e: KeyboardEvent) {
             const dialog = dialogRef.current
             if (e.code !== 'KeyQ' || !dialog) return
-            else if (isCharNear && !dialog.open) dialog.showModal()
+            else if (isCharNear && !dialog.open) handleModal()
         }
 
         window.addEventListener('keydown', interactModal)
@@ -166,8 +184,8 @@ export default function Obstacle({ image, style }: {
                 src={image}
             />
             <dialog ref={dialogRef}>
-                <p>Greetings, one and all!</p>
-                <button onClick={() => dialogRef.current && dialogRef.current.close()}>
+                <p>Greetings, {randomString} and all!</p>
+                <button onClick={handleModal}>
                     Close
                 </button>
             </dialog>
