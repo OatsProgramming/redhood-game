@@ -67,9 +67,15 @@ export default function Obstacle({ image, style }: {
 
         // For 3D effect
         // Behind char
-        if (charRect.bottom > obsRect.bottom) char.style.zIndex = '1'
+        if (charRect.bottom > obsRect.bottom) {
+            char.style.zIndex = '1'
+            obs.style.zIndex = '0'
+        }
         // In front of char
-        else char.style.zIndex = '0'
+        else {
+            char.style.zIndex = '0'
+            obs.style.zIndex = '1'
+        }
 
         // For text bubble
         const buffer = 30
