@@ -4,6 +4,7 @@ import charLocator from "../util/charLocator";
 
 const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
     obstacle: null,
+    obsImg: null,
     keyCollision: (charStore) => {
         const { character: char, setCharPos, getCurrentPos } = charStore
         if (!char) return
@@ -56,11 +57,12 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
     // Predict possible collisions 
     pointerCollision: (charStore: CharacterAction & CharacterState, e: PointerEvent) => {
         const { character: char, setCharPos, getCurrentPos } = charStore
-        if (!char) return
+        const obsImg = get().obsImg
+        if (!char || !obsImg) return
 
-        const obsRect = get().obstacle?.getBoundingClientRect()!
+        const obsImgRect = obsImg.getBoundingClientRect()
         const charRect = char.getBoundingClientRect()
-        const { sideX, sideY } = charLocator(charRect, obsRect)
+        const { sideX, sideY } = charLocator(charRect, obsImgRect)
 
         let lineX: Line | undefined;
         let lineY: Line | undefined;
@@ -77,12 +79,12 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             // Check lines that go vertically
             lineY = {
                 ptOne: {
-                    x: obsRect[sideX],
-                    y: obsRect.top
+                    x: obsImgRect[sideX],
+                    y: obsImgRect.top
                 },
                 ptTwo: {
-                    x: obsRect[sideX],
-                    y: obsRect.bottom
+                    x: obsImgRect[sideX],
+                    y: obsImgRect.bottom
                 }
             }
         }
@@ -92,12 +94,12 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
             // Check lines that go horizontally
             lineX = {
                 ptOne: {
-                    x: obsRect.left,
-                    y: obsRect[sideY]
+                    x: obsImgRect.left,
+                    y: obsImgRect[sideY]
                 },
                 ptTwo: {
-                    x: obsRect.right,
-                    y: obsRect[sideY]
+                    x: obsImgRect.right,
+                    y: obsImgRect[sideY]
                 }
             }
         }
@@ -126,7 +128,8 @@ const useObstacle = create<ObstacleState & ObstacleAction>()((set, get) => ({
         }
     },
     // On init
-    setObstacle: (obstacle) => set({ obstacle })
+    setObstacle: (obstacle) => set({ obstacle }),
+    setObsImg: (obsImg) => set({ obsImg })
 }))
 
 export default useObstacle

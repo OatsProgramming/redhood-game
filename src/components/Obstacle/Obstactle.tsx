@@ -5,6 +5,7 @@ import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
 import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
+import useDialog from "../../lib/zustand/dialogStore";
 
 export default function Obstacle({ image, style }: {
     image: string,
@@ -13,9 +14,11 @@ export default function Obstacle({ image, style }: {
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
 }) {
     const charStore = useCharacter()
-    const { keyCollision, pointerCollision, setObstacle } = useObstacle()
+    const { setDialog } = useDialog()
+    const { keyCollision, pointerCollision, setObstacle, setObsImg } = useObstacle()
 
     const obsRef = useRef<HTMLDivElement>(null)
+    const obsImgRef = useRef<HTMLImageElement>(null)
     const lottieRef = useRef<LottieRefCurrentProps>(null)
     const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -25,7 +28,11 @@ export default function Obstacle({ image, style }: {
 
     // For collision
     useEffect(() => {
-        setObstacle(obsRef.current!)
+        if (!obsRef.current || !obsImgRef.current) return
+        setObstacle(obsRef.current)
+        setObsImg(obsImgRef.current)
+        setDialog(dialogRef.current!)
+
         function collisionDetection(e: KeyboardEvent | PointerEvent) {
             // Only care about character's movement
             if (e instanceof KeyboardEvent && !e.key.includes('Arrow')) return
@@ -126,9 +133,7 @@ export default function Obstacle({ image, style }: {
         function interactModal(e: KeyboardEvent) {
             const dialog = dialogRef.current
             if (e.code !== 'KeyQ' || !dialog) return
-            if (isCharNear) {
-                !dialog.open && dialog.showModal()
-            }
+            else if (isCharNear && !dialog.open) dialog.showModal()
         }
 
         window.addEventListener('keydown', interactModal)
@@ -151,14 +156,15 @@ export default function Obstacle({ image, style }: {
                 onComplete={() => !isCharNear && setLottieClass('none')}
             />
             <img
+                ref={obsImgRef}
                 className="obstacle"
                 src={image}
             />
             <dialog ref={dialogRef}>
                 <p>Greetings, one and all!</p>
-                <form method="dialog">
-                    <button>OK</button>
-                </form>
+                <button onClick={() => dialogRef.current && dialogRef.current.close()}>
+                    Close
+                </button>
             </dialog>
         </div>
     )

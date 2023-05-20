@@ -23,13 +23,15 @@ type CharacterAction = {
 }
 
 type ObstacleState = {
-    obstacle: HTMLDivElement | null
+    obstacle: HTMLDivElement | null,
+    obsImg: HTMLImageElement | null
 }
 
 type ObstacleAction = {
     keyCollision: (charStore: CharacterAction & CharacterState) => void,
     pointerCollision: (charStore: CharacterAction & CharacterState, e: PointerEvent) => void,
     setObstacle: (obstacle: HTMLDivElement) => void,
+    setObsImg: (obsImg: HTMLImageElement) => void
 }
 
 type Line = {
@@ -45,4 +47,9 @@ type Intersect = {
 type ReqCSS = 'top' | 'left'
 type RequiredStyles = Record<ReqCSS, string | number>  & {
     scale?: string
+}
+
+type DialogStore = {
+    dialog: HTMLDialogElement | null,
+    setDialog: (dialog: HTMLDialogElement) => void
 }
