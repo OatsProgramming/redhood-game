@@ -1,11 +1,12 @@
-import useObstacle from "../../lib/zustand/obstacleStore"
-import { CSSProperties, HTMLProps, useEffect, useRef, useState } from "react"
+import { CSSProperties, useEffect, useRef, useState } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
 import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
 import useDialog from "../../lib/zustand/dialogStore";
+import keyCollision from "../../lib/util/keyCollision";
+import pointerCollision from "../../lib/util/pointerCollision";
 
 export default function Obstacle({ image, style }: {
     image: string,
@@ -15,7 +16,6 @@ export default function Obstacle({ image, style }: {
 }) {
     const charStore = useCharacter()
     const { setDialog } = useDialog()
-    const { keyCollision, pointerCollision, setObstacle, setObsImg } = useObstacle()
 
     const obsRef = useRef<HTMLDivElement>(null)
     const obsImgRef = useRef<HTMLImageElement>(null)
@@ -28,23 +28,22 @@ export default function Obstacle({ image, style }: {
 
     // For collision
     useEffect(() => {
-        if (!obsRef.current || !obsImgRef.current) return
-        setObstacle(obsRef.current)
-        setObsImg(obsImgRef.current)
-        setDialog(dialogRef.current!)
+        if (dialogRef.current) setDialog(dialogRef.current)
 
         function collisionDetection(e: KeyboardEvent | PointerEvent) {
+            if (!obsRef.current || !obsImgRef.current) return
+
             // Only care about character's movement
-            if (e instanceof KeyboardEvent && !e.key.includes('Arrow')) return
             else if (e.target !== document.body) return
+            else if (e instanceof KeyboardEvent && !e.key.includes('Arrow')) return
 
             // Check if user is using taps for movement
             else if (e instanceof PointerEvent) {
-                pointerCollision(charStore, e)
+                pointerCollision(charStore, e, obsImgRef.current)
             }
 
             // Or with the keys
-            else keyCollision(charStore)
+            else keyCollision(charStore, obsRef.current!)
         }
 
         window.addEventListener('keydown', collisionDetection)
