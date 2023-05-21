@@ -10,25 +10,3 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
-
-.details {
-    width: clamp(150px, 50vw, 500px);
-    aspect-ratio: 19 / 9;
-    background-image: url('https://i.imgur.com/TTSJ7yA.png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    border: none;
-}
-
-.details > div {
-    height: 100%;
-    display: flex;
-    place-items: center;
-}
-
-.details::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-}
-

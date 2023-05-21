@@ -55,4 +55,37 @@ const food: Item[] = [
     }
 ]
 
-export { food }
+const food2: Item[] = [
+  {
+    name: 'Chicken Leg',
+    description: 'Restores 25 HP',
+    imgUrl: 'https://i.imgur.com/otneiAp.png',
+    price: 30
+  },
+  {
+    name: 'Marmalade',
+    description: 'Restores 15 HP with fire resistance',
+    imgUrl: 'https://i.imgur.com/WD6SvLX.png',
+    price: 30
+  },
+  {
+    name: 'Sashimi',
+    description: 'Restores 50 HP',
+    imgUrl: 'https://i.imgur.com/LBQLzcT.png',
+    price: 50
+  },
+  {
+    name: 'Sushi',
+    description: 'Restores 50 HP with a small chance of doing a happy dance',
+    imgUrl:'https://i.imgur.com/dNLEwxr.png',
+    price: 45
+  },
+  {
+    name: 'Watermelon',
+    description: 'Restores 10 HP',
+    imgUrl: 'https://i.imgur.com/Oxc0BJk.png',
+    price: 25
+  }
+]
+
+export { food, food2 }

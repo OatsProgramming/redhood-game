@@ -1,6 +1,6 @@
 import Character from "./components/Character/Character";
 import Obstacle from "./components/Obstacle/Obstactle";
-import { food } from "./lib/items";
+import { food, food2 } from "./lib/items";
 
 export default function App() {
   return (
@@ -17,7 +17,7 @@ export default function App() {
      />  
       
       <Obstacle
-        items={food}
+        items={food2}
         image='/woodenCart.PNG'
        style={{
           top: '80vh',

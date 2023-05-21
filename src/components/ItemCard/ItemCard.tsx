@@ -1,10 +1,12 @@
-import { useRef } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import './itemCard.css'
+import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
 
 export default function ItemCard({ item }: {
     item: Item
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
+
     return (
         <li className='itemCard'>
             <img
@@ -19,21 +21,10 @@ export default function ItemCard({ item }: {
             <button onClick={() => dialogRef.current?.showModal()}>
                 Details
             </button>
-            <dialog className='details' ref={dialogRef}>
-                <div>
-                    <img
-                        loading='lazy'
-                        src={item.imgUrl}
-                        width={100}
-                    />
-                    <button onClick={() => dialogRef.current?.close()}>
-                        Cancel
-                    </button>
-                    <button onClick={() => dialogRef.current?.close()}>
-                        Confirm ('mod later')
-                    </button>
-                </div>
-            </dialog>
+            <DetailsDialog 
+                item={item}
+                ref={dialogRef}
+            />
         </li>
     )
 }
