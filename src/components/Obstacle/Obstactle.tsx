@@ -6,7 +6,7 @@ import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
 import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
-import Dialog from "../Dialog/Dialog";
+import ItemsDialog from "../Dialog/ItemsDialog/ItemsDialog";
 
 export default function Obstacle({ image, style, items }: {
     image: string,
@@ -27,7 +27,7 @@ export default function Obstacle({ image, style, items }: {
     // Can't directly use .style for some reason (readonly)
     const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
 
-    const handleModal = useCallback(function() {
+    const handleModal = useCallback(function () {
         const dialog = dialogRef.current
         if (!dialog || !isCharNear) return
 
@@ -185,7 +185,7 @@ export default function Obstacle({ image, style, items }: {
                 className="obstacle"
                 src={image}
             />
-            <Dialog 
+            <ItemsDialog
                 ref={dialogRef}
                 handleModal={handleModal}
                 items={items}

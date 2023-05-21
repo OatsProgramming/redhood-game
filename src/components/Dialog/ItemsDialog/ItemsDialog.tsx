@@ -1,8 +1,8 @@
 import { ForwardedRef, forwardRef } from "react";
-import './dialog.css'
-import FoodCard from "../ItemCard/ItemCard";
+import './itemsDialog.css'
+import ItemCard from "../../ItemCard/ItemCard";
 
-const Dialog = forwardRef(function (
+const ItemsDialog = forwardRef(function (
     props: {
         items: Item[]
         handleModal: () => void,
@@ -14,7 +14,7 @@ const Dialog = forwardRef(function (
         <dialog ref={ref} className="itemsDialog">
             <ul>
                 {items.map(item => (
-                    <FoodCard key={item.name} item={item} />
+                    <ItemCard key={item.name} item={item} />
                 ))}
             </ul>
             <button className="closeBtn" onClick={handleModal}>
@@ -24,4 +24,4 @@ const Dialog = forwardRef(function (
     )
 })
 
-export default Dialog
+export default ItemsDialog

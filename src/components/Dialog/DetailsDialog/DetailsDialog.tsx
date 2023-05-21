@@ -1,4 +1,4 @@
-import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, MutableRefObject } from "react";
+import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useEffect } from "react";
 import './detailsDialog.css'
 
 const DetailsDialog = forwardRef(function (
@@ -6,16 +6,17 @@ const DetailsDialog = forwardRef(function (
     ref: ForwardedRef<HTMLDialogElement>
 ) {
     const dialog = (ref as RefObject<HTMLDialogElement>).current
-    if (!dialog) return <></>
 
     const { item } = props
     const [amnt, setAmnt] = useState(0)
 
+    // Drag
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
         setAmnt(Number(input.value))
     }
 
+    // Button
     function handleClick(e: PointerEvent<HTMLButtonElement>) {
         const btn = e.target as HTMLButtonElement
         const value = Number(btn.textContent)
@@ -53,10 +54,10 @@ const DetailsDialog = forwardRef(function (
                         </div>
                     </div>
                     <div className='btnContainer'>
-                        <button onPointerDown={() => dialog.close()}>
+                        <button onPointerDown={() => dialog?.close()}>
                             Cancel
                         </button>
-                        <button onPointerDown={() => dialog.close()}>
+                        <button onPointerDown={() => dialog?.close()}>
                             Confirm ('mod later')
                         </button>
                     </div>

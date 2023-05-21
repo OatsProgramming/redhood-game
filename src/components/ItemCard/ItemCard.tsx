@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react'
+import { useRef } from 'react'
 import './itemCard.css'
 import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
 

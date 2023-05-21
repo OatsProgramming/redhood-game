@@ -22,6 +22,7 @@
 
 .detailsContainer > img {
     grid-area: img;
+    
 }
 
 .currentAmnt {
