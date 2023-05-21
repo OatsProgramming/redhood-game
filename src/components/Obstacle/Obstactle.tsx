@@ -180,6 +180,7 @@ export default function Obstacle({ image, style, items }: {
                 onComplete={() => !isCharNear && setLottieClass('none')}
             />
             <img
+                loading="lazy"
                 ref={obsImgRef}
                 className="obstacle"
                 src={image}

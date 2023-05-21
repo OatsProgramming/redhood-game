@@ -8,11 +8,18 @@
 }
 
 .itemsDialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.651)
+    background-color: rgba(0, 0, 0, 0.5)
 }
 
-.closeBtn {
+.itemsDialog > ul {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 3rem;
+    column-gap: 1rem;
+}
+
+/* .closeBtn {
     position: absolute;
     bottom: 3vh;
     left: 3vh;
-}
+} */
