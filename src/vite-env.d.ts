@@ -36,3 +36,11 @@ type ReqCSS = 'top' | 'left'
 type RequiredStyles = Record<ReqCSS, string | number>  & {
     scale?: string
 }
+
+type Item = {
+    name: string,
+    description: string,
+    imgUrl: string,
+    price: number,
+  }
+  

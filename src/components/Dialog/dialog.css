@@ -1,0 +1,18 @@
+.itemsDialog {
+    background-image: url('https://cdnb.artstation.com/p/assets/images/images/004/682/455/large/simon-sanchez-madera-tilepreview.jpg?1485480357');
+    background-position: center;
+    width: 80dvw;
+    height: 50dvh;
+    border: 10px solid black;
+    position: relative;
+}
+
+.itemsDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.651)
+}
+
+.closeBtn {
+    position: absolute;
+    bottom: 3vh;
+    left: 3vh;
+}

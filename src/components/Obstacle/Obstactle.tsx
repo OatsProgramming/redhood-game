@@ -6,10 +6,11 @@ import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
 import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
+import Dialog from "../Dialog/Dialog";
 
-export default function Obstacle({ image, style, randomString }: {
+export default function Obstacle({ image, style, items }: {
     image: string,
-    randomString: string,
+    items: Item[],
     // Don't mess with width or height: treat all objects present in window as paper cutouts
     // Use scale only for resizing; otherwise, will affect the collision borders
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
@@ -183,12 +184,11 @@ export default function Obstacle({ image, style, randomString }: {
                 className="obstacle"
                 src={image}
             />
-            <dialog ref={dialogRef}>
-                <p>Greetings, {randomString} and all!</p>
-                <button onClick={handleModal}>
-                    Close
-                </button>
-            </dialog>
+            <Dialog 
+                ref={dialogRef}
+                handleModal={handleModal}
+                items={items}
+            />
         </div>
     )
 }

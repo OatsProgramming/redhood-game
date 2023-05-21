@@ -1,22 +1,15 @@
 import Character from "./components/Character/Character";
 import Obstacle from "./components/Obstacle/Obstactle";
-
-// width: 220px;
-// height: 220px;
-
-// top: 20vh;
-// left: 25vh;
-
-// '/woodenCart.PNG'
+import { food } from "./lib/items";
 
 export default function App() {
   return (
     <>
       <Character />
       <Obstacle
+        items={food}
         image='/woodenCart.PNG'
-        randomString="one"
-        style={{
+       style={{
           top: '40vh',
           left: '25vh',
           scale: '2'
@@ -24,9 +17,9 @@ export default function App() {
      />  
       
       <Obstacle
+        items={food}
         image='/woodenCart.PNG'
-        randomString="two"
-        style={{
+       style={{
           top: '80vh',
           left: '25vh',
           scale: '2'
@@ -34,15 +27,15 @@ export default function App() {
      />
       
       <Obstacle
+        items={food}
         image='/woodenCart.PNG'
-        randomString="three"
         style={{
           top: '20vh',
           left: '2vh',
           scale: '1'
         }}
       />
-       
+     
     </>
   )
 }
