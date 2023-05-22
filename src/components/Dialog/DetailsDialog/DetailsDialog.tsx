@@ -1,21 +1,17 @@
-import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useCallback, memo } from "react";
+import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useCallback, memo, useRef } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
-const DetailsDialog = forwardRef(function (
-    props: { item: Item }, 
-    ref: ForwardedRef<HTMLDialogElement>
-) {
-    const { item } = props
-    const dialog = (ref as RefObject<HTMLDialogElement>).current
-
+export default function DetailsDialog ({ item }: {
+    item: Item
+}) {
     const [amnt, setAmnt] = useState(0)
     const { addItem, removeItem } = useInventory()
+    const dialogRef = useRef<HTMLDialogElement>(null)
 
     // Drag
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
-        console.log(input.value)
         setAmnt(Number(input.value))
     }, [])
 
@@ -40,8 +36,20 @@ const DetailsDialog = forwardRef(function (
         removeItem(inventoryItem)
     }, [])
 
+    const handleModal = useCallback(function (){
+        const dialog = dialogRef.current
+        if (!dialog) return
+
+        if (dialog.open) dialog.close()
+        else dialog.showModal()
+    }, [dialogRef.current])
+
     return (
-        <dialog className='details' ref={ref}>
+        <>
+            <button onPointerDown={handleModal}>
+                Details
+            </button>
+            <dialog className='details' ref={dialogRef}>
                 {/* Added detailsContainer: cant directly change display of dialog w/o it going haywire */}
                 <div className='detailsContainer'>
                     <img
@@ -71,7 +79,7 @@ const DetailsDialog = forwardRef(function (
                         </div>
                     </div>
                     <div className='btnContainer'>
-                        <button onPointerDown={() => dialog?.close()}>
+                        <button onPointerDown={handleModal}>
                             Cancel
                         </button>
                         <button onPointerDown={() => addItem({ ...item, amnt })}>
@@ -84,7 +92,7 @@ const DetailsDialog = forwardRef(function (
                     </div>
                 </div>
             </dialog>
+        </>
     )
-})
+}
 
-export default DetailsDialog

@@ -5,7 +5,6 @@ import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
 const ItemCard = memo(function ({ item }: {
     item: Item
 }) {
-    const dialogRef = useRef<HTMLDialogElement>(null)
 
     return (
         <li className='itemCard'>
@@ -18,13 +17,7 @@ const ItemCard = memo(function ({ item }: {
                 <p>{item.name}</p>
                 <p>{item.price}</p>
             </div>
-            <button onClick={() => dialogRef.current?.showModal()}>
-                Details
-            </button>
-            <DetailsDialog 
-                item={item}
-                ref={dialogRef}
-            />
+            <DetailsDialog item={item}/>
         </li>
     )
 })
