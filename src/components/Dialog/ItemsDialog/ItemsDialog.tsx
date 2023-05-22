@@ -1,7 +1,8 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import './itemsDialog.css'
 import ItemCard from "../../ItemCard/ItemCard";
 import useCharacter from "../../../lib/zustand/characterStore";
+import toggleDialog from "../../../lib/util/toggleDialog";
 
 export default function ItemsDialog({ items, isCharNear }: {
     items: Item[],
@@ -9,31 +10,12 @@ export default function ItemsDialog({ items, isCharNear }: {
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
     const { character, setCharacter } = useCharacter()
-    const [charHolder, setCharHolder] = useState<HTMLDivElement | null>(null)
-
-    const handleModal = useCallback(function () {
-        const dialog = dialogRef.current
-        if (!dialog) return
-
-        if (dialog.open) {
-            // Reconnect character to allow movement
-            setCharacter(charHolder)
-            setCharHolder(null)
-            dialog.close()
-        } else {
-            // Disconnect character to disable movement
-            setCharHolder(character)
-            setCharacter(null)
-            dialog.showModal()
-        }
-        
-    }, [dialogRef.current?.open, isCharNear])
 
     useEffect(() => {
         function interactModal(e: KeyboardEvent) {
             const dialog = dialogRef.current
             if (e.code !== 'KeyQ' || !dialog || !isCharNear) return
-            handleModal()
+            toggleDialog(dialogRef, character, setCharacter)
         }
 
         window.addEventListener('keydown', interactModal)
@@ -49,7 +31,7 @@ export default function ItemsDialog({ items, isCharNear }: {
                     <ItemCard key={item.name} item={item} />
                 ))}
             </ul>
-            <button className="closeBtn" onClick={handleModal}>
+            <button className="closeBtn" onClick={() => toggleDialog(dialogRef, character, setCharacter)}>
                 Close
             </button>
         </dialog>
