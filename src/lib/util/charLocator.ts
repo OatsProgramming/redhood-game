@@ -1,5 +1,10 @@
-// Before collision detection, check which side the character was on
-// Tried during and after collision: does not work whatsoever. DO NOT ATTEMPT
+/**
+ * Before collision detection, check which side the character was on.
+ *  Tried during and after collision: does not work whatsoever. DO NOT ATTEMPT
+ * @param charRect 
+ * @param obsRect 
+ * @returns 
+ */
 export default function charLocator(charRect: DOMRect, obsRect: DOMRect) {
     // Y-Axis
     let sideY: 'top' | 'bottom' | undefined;

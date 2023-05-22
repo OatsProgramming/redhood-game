@@ -1,6 +1,18 @@
 import charLocator from "./charLocator"
 import doIntersect from "./doIntersect"
 
+/**
+ * To check for collision based on line segments.
+ * - Character Line: current position -> desired position
+ * - Obstacle Line: Going off from character's current position -> sideX & sideY of obstacle
+ *  
+ * @param charStore 
+ * @param e 
+ * @param obsImg 
+ * @returns 
+ */
+
+
 export default function pointerCollision(charStore: CharacterAction & CharacterState, e: PointerEvent, obsImg: HTMLImageElement) {
     const { character: char, setCharPos, getCurrentPos } = charStore
     if (!char || !obsImg) return

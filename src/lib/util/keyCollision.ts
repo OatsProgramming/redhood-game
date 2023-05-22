@@ -1,5 +1,12 @@
 import charLocator from "./charLocator"
 
+/**
+ * To check for collision based off from Arrow Keys.
+ * @param charStore 
+ * @param obstacle 
+ * @returns 
+ */
+
 export default function keyCollision(charStore: CharacterAction & CharacterState, obstacle: HTMLDivElement) {
     const { character: char, setCharPos, getCurrentPos } = charStore
     if (!char) return
