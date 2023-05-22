@@ -10,6 +10,9 @@ const ItemsDialog = forwardRef(function (
     ref: ForwardedRef<HTMLDialogElement>
 ) {
     const { handleModal, items } = props
+
+    // Renders x2
+    console.log('asfd')
     return (
         <dialog ref={ref} className="itemsDialog">
             <ul>

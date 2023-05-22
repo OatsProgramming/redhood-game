@@ -6,6 +6,8 @@ export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
   const { character, move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
 
+  // Renders x2 -> x4 keyup
+  console.log('asd')
   useEffect(() => {
     const windowCenter = {
       x: window.innerWidth / 2,

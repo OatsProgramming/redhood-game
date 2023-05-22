@@ -1,27 +1,36 @@
-import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useEffect } from "react";
+import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useEffect, useCallback, memo } from "react";
 import './detailsDialog.css'
+import useInventory from "../../../lib/zustand/inventoryStore";
 
 const DetailsDialog = forwardRef(function (
     props: { item: Item }, 
     ref: ForwardedRef<HTMLDialogElement>
 ) {
+    const { item } = props
     const dialog = (ref as RefObject<HTMLDialogElement>).current
 
-    const { item } = props
     const [amnt, setAmnt] = useState(0)
+    // const { inventory, addItem } = useInventory()
 
+    // Renders x18 per Obstacle
+    console.log('asd')
     // Drag
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
+        console.log(input.value)
         setAmnt(Number(input.value))
-    }
+    }, [])
 
     // Button
-    function handleClick(e: PointerEvent<HTMLButtonElement>) {
+    const handleClick = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
         const btn = e.target as HTMLButtonElement
         const value = Number(btn.textContent)
-        setAmnt(state => state + value)
-    }
+        setAmnt(state => {
+            const newAmnt = state + value
+            if (newAmnt < 0) return state
+            return newAmnt
+        })
+    }, [])
 
     return (
         <dialog className='details' ref={ref}>
@@ -57,8 +66,11 @@ const DetailsDialog = forwardRef(function (
                         <button onPointerDown={() => dialog?.close()}>
                             Cancel
                         </button>
-                        <button onPointerDown={() => dialog?.close()}>
-                            Confirm ('mod later')
+                        <button onPointerDown={() => {
+                            // addItem({ ...item, amnt })
+                            // alert(inventory)
+                        }}>
+                            Confirm 
                         </button>
                     </div>
                 </div>

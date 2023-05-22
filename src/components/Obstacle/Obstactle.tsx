@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useEffect, useRef, useState } from "react"
+import { CSSProperties, memo, useCallback, useEffect, useRef, useState } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
@@ -8,7 +8,7 @@ import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
 import ItemsDialog from "../Dialog/ItemsDialog/ItemsDialog";
 
-export default function Obstacle({ image, style, items }: {
+const Obstacle = memo(function ({ image, style, items }: {
     image: string,
     items: Item[],
     // Don't mess with width or height: treat all objects present in window as paper cutouts
@@ -26,6 +26,9 @@ export default function Obstacle({ image, style, items }: {
     const [charHolder, setCharHolder] = useState<HTMLDivElement | null>(null)
     // Can't directly use .style for some reason (readonly)
     const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
+    
+    // Renders x4 per Obstacle
+    console.log('hello')
 
     const handleModal = useCallback(function () {
         const dialog = dialogRef.current
@@ -44,11 +47,9 @@ export default function Obstacle({ image, style, items }: {
         }
     }, [dialogRef.current?.open, isCharNear])
 
+
     // For collision
     useEffect(() => {
-        // if (!dialogRef.current) return
-        // setDialog(dialogRef.current)
-
         function collisionDetection(e: KeyboardEvent | PointerEvent) {
             if (!obsRef.current || !obsImgRef.current) return
 
@@ -192,4 +193,8 @@ export default function Obstacle({ image, style, items }: {
             />
         </div>
     )
-}
+}, (prevProps, nextProps) => {  
+    return prevProps.image === nextProps.image
+})
+
+export default Obstacle

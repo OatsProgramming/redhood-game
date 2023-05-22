@@ -1,12 +1,14 @@
-import { useRef } from 'react'
+import { memo, useRef } from 'react'
 import './itemCard.css'
 import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
 
-export default function ItemCard({ item }: {
+const ItemCard = memo(function ({ item }: {
     item: Item
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
 
+    // Renders x18
+    console.log('asd')
     return (
         <li className='itemCard'>
             <img
@@ -27,4 +29,6 @@ export default function ItemCard({ item }: {
             />
         </li>
     )
-}
+})
+
+export default ItemCard

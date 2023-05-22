@@ -1,4 +1,4 @@
-import { useState, PointerEvent } from 'react'
+import { useState, PointerEvent, useCallback } from 'react'
 import './interactBtns.css'
 import btns from './btnList'
 
@@ -7,10 +7,12 @@ export default function InteractBtns() {
     const [firstTimer, setFirstTimer] = useState(0)
     const [secondTimer, setSecondTimer] = useState(0)
 
+    // Renders x2
+    console.log('asd')
     // Note to self: (bug)
     // When using on-screen btns, user has the ability to phase thru objects
     // After usage, user still has ability with keyboard btns (fix when possible)
-    function handleMovement(e: PointerEvent<HTMLButtonElement>) {
+    const handleMovement = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
         e.preventDefault()
         const btn = e.currentTarget as HTMLButtonElement
 
@@ -32,9 +34,9 @@ export default function InteractBtns() {
             setSecondTimer(secondTimerId)
         }, 0)
         setFirstTimer(firstTimerId)
-    }
+    }, [isRunning])
 
-    function StopTimer(e: PointerEvent<HTMLButtonElement>) {
+    const StopTimer = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
         const btn = e.currentTarget as HTMLButtonElement
 
         // Turn off loop
@@ -49,7 +51,7 @@ export default function InteractBtns() {
             code: btn.className === 'KeyQ' ? btn.className : '',
             repeat: true,
         }));
-    }
+    }, [firstTimer, secondTimer])
 
     return (
         <div className="interactBtns">
