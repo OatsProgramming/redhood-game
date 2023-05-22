@@ -10,8 +10,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     // firstTimer does not clearTimeout the second one automatically if
     // firstTimer has finished executing
     secondTimer: null,
-    // If user is using keys to interact
-    changeAnimation: (e) => {
+    moveByKey: (e) => {
         const div = get().character!
         const animation = get().animation
         const isGoing = get().isGoing
@@ -100,8 +99,7 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
             return ({ move: { x, y } })
         })
     },
-    // If user wants to tap the screen
-    goHere: (e) => {
+    moveByPointer: (e) => {
         // Prevent char from traveling if screen pop up, obstacle, etc.
         if (e.target !== document.body) return
 

@@ -13,9 +13,9 @@ type CharacterState = {
 }
 
 type CharacterAction = {
-    changeAnimation: (e: KeyboardEvent) => void,
+    moveByKey: (e: KeyboardEvent) => void,
     toStand: (e: KeyboardEvent) => void,
-    goHere: (e: PointerEvent) => void,
+    moveByPointer: (e: PointerEvent) => void,
     setCharacter: (el: HTMLDivElement | null) => void,
     setAnimation: (action: AnimNames) => void,
     setCharPos: (pos: Position) => void,

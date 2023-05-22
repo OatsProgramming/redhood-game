@@ -1,4 +1,4 @@
-import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useCallback, memo, useRef } from "react";
+import { useState, ChangeEvent, PointerEvent, useCallback, useRef } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 

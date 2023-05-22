@@ -4,7 +4,7 @@ import useCharacter from '../../lib/zustand/characterStore'
 
 export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
-  const { character, move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
+  const { character, move, animation, moveByKey, toStand, moveByPointer, setAnimation, setCharacter, setCharPos } = useCharacter()
 
   // Init
   useEffect(() => {
@@ -26,8 +26,8 @@ export default function Character() {
         e instanceof PointerEvent && e.target !== document.body
       ) return
 
-      if (e instanceof KeyboardEvent) changeAnimation(e)
-      else goHere(e)
+      if (e instanceof KeyboardEvent) moveByKey(e)
+      else moveByPointer(e)
     }
 
     // Prevent context for mobile on long press
