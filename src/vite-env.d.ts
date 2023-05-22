@@ -33,7 +33,7 @@ type Intersect = {
 }
 
 type ReqCSS = 'top' | 'left'
-type RequiredStyles = Record<ReqCSS, string | number>  & {
+type RequiredStyles = Record<ReqCSS, string | number> & {
     scale?: string
 }
 
@@ -42,5 +42,14 @@ type Item = {
     description: string,
     imgUrl: string,
     price: number,
-  }
-  
+}
+
+type InventoryItem = Item & {
+    amnt: number
+}
+
+type InventoryStore = {
+    inventory: InventoryItem[],
+    addItem: (item: InventoryItem) => void,
+    removeItem: (item: InventoryItem) => void
+}

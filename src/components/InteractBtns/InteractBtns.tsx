@@ -7,8 +7,6 @@ export default function InteractBtns() {
     const [firstTimer, setFirstTimer] = useState(0)
     const [secondTimer, setSecondTimer] = useState(0)
 
-    // Renders x2
-    console.log('asd')
     // Note to self: (bug)
     // When using on-screen btns, user has the ability to phase thru objects
     // After usage, user still has ability with keyboard btns (fix when possible)

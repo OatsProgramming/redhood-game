@@ -27,9 +27,6 @@ const Obstacle = memo(function ({ image, style, items }: {
     // Can't directly use .style for some reason (readonly)
     const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
     
-    // Renders x4 per Obstacle
-    console.log('hello')
-
     const handleModal = useCallback(function () {
         const dialog = dialogRef.current
         if (!dialog || !isCharNear) return

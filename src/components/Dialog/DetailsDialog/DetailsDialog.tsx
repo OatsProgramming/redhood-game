@@ -1,4 +1,4 @@
-import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useEffect, useCallback, memo } from "react";
+import { RefObject, useState, ChangeEvent, PointerEvent, forwardRef, ForwardedRef, useCallback, memo } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
@@ -10,10 +10,8 @@ const DetailsDialog = forwardRef(function (
     const dialog = (ref as RefObject<HTMLDialogElement>).current
 
     const [amnt, setAmnt] = useState(0)
-    // const { inventory, addItem } = useInventory()
+    const { addItem, removeItem } = useInventory()
 
-    // Renders x18 per Obstacle
-    console.log('asd')
     // Drag
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
@@ -30,6 +28,16 @@ const DetailsDialog = forwardRef(function (
             if (newAmnt < 0) return state
             return newAmnt
         })
+    }, [])
+
+    const handleRemoval = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
+        const btn = e.target as HTMLButtonElement
+        const amnt = Number(btn.textContent)
+        const inventoryItem: InventoryItem = {
+            ...item,
+            amnt
+        }
+        removeItem(inventoryItem)
     }, [])
 
     return (
@@ -66,11 +74,12 @@ const DetailsDialog = forwardRef(function (
                         <button onPointerDown={() => dialog?.close()}>
                             Cancel
                         </button>
-                        <button onPointerDown={() => {
-                            // addItem({ ...item, amnt })
-                            // alert(inventory)
-                        }}>
+                        <button onPointerDown={() => addItem({ ...item, amnt })}>
                             Confirm 
+                        </button>
+                        {/* Temporary: to test useInventory() */}
+                        <button onPointerDown={handleRemoval}>
+                            10
                         </button>
                     </div>
                 </div>

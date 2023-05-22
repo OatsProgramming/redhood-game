@@ -7,8 +7,6 @@ const ItemCard = memo(function ({ item }: {
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
 
-    // Renders x18
-    console.log('asd')
     return (
         <li className='itemCard'>
             <img
