@@ -1,18 +1,18 @@
 import { useEffect, useRef } from "react";
 import './inventoryDialog.css'
+import useInventory from "../../../lib/zustand/inventoryStore";
+import toggleModal from "../../../lib/util/toggleDialog";
+import useCharacter from "../../../lib/zustand/characterStore";
 
 export default function InventoryDialog() {
+    const { inventory } = useInventory()
+    const { character, setCharacter } = useCharacter()
     const dialogRef = useRef<HTMLDialogElement>(null)
 
     useEffect(() => {
-        const dialog = dialogRef.current
-
         function handleModal(e: KeyboardEvent) {
-            if (e.code !== 'KeyE' || !dialog) return
-
-            if (dialog.open) dialog.close()
-            else dialog.showModal()
-
+            if (e.code !== 'KeyE') return
+            toggleModal(dialogRef, character, setCharacter)
         }
 
         window.addEventListener('keydown', handleModal)
@@ -21,7 +21,7 @@ export default function InventoryDialog() {
 
     return (
         <dialog className="inventoryDialog" ref={dialogRef}>
-            <div>
+            <div className="icons">
                 <img className="armor"
                     src="https://i.imgur.com/aQW9JLJ.png"
                 />
