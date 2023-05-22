@@ -1,0 +1,37 @@
+.inventoryDialog {
+    width: 80vw;
+    max-width: 750px;
+    aspect-ratio: 1920 / 1864;
+    background-image: url('https://i.imgur.com/h81LAx9.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    position: relative;
+}
+
+.inventoryDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.inventoryDialog > div {
+    position: absolute;
+    display: flex;
+    gap: 1rem;
+    top: 7px;
+    left: 60px;
+    /* border: 5px solid green; */
+}
+
+
+.inventoryDialog img {
+    width: 5vw;
+    max-width: 47px;
+    transition: scale 200ms ease
+}
+
+.inventoryDialog > div > img:hover {
+    scale: 1.5;
+    filter: drop-shadow(0 0 10px #000);
+}

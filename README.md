@@ -5,3 +5,6 @@
 
 [Henry Software](https://henrysoftware.itch.io/)
 - Pixel Food [🔗](https://henrysoftware.itch.io/pixel-food) 
+
+[Jacob Bergholtz](https://www.artstation.com/jacobbergholtz)
+- Inventory UI [🔗](https://www.artstation.com/artwork/rRoRWe)
