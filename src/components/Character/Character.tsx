@@ -18,20 +18,31 @@ export default function Character() {
   useEffect(() => {
     // Set initial character location at the middle
     function handleMovements(e: PointerEvent | KeyboardEvent) {
-      // Check if character is connected (dialog.open ?)
-      if (!character) return
+      // Check if character is connected (Related to if dialog.open)
+      if (
+        !character ||
+        e instanceof PointerEvent && e.target !== document.body
+      ) return
 
-      if (e instanceof PointerEvent) goHere(e)
-      else changeAnimation(e)
+      if (e instanceof KeyboardEvent) changeAnimation(e)
+      else goHere(e)
     }
+
+    // Prevent context for mobile on long press
+    // function preventContext(e: MouseEvent) {
+    //   console.log(e)
+    //   e.preventDefault()
+    // }
 
     window.addEventListener('keydown', handleMovements)
     window.addEventListener('keyup', toStand)
     document.body.addEventListener('pointerdown', handleMovements)
+    // document.body.addEventListener('contextmenu', preventContext)
     return () => {
       window.removeEventListener('keydown', handleMovements)
       window.removeEventListener('keyup', toStand)
       document.body.removeEventListener('pointerdown', handleMovements)
+      // document.body.removeEventListener('contextmenu', preventContext)
     }
   }, [character])
 
