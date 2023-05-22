@@ -6,6 +6,7 @@ export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)
   const { character, move, animation, changeAnimation, toStand, goHere, setAnimation, setCharacter, setCharPos } = useCharacter()
 
+  // Init
   useEffect(() => {
     const windowCenter = {
       x: window.innerWidth / 2,
@@ -15,6 +16,7 @@ export default function Character() {
     setCharacter(divRef.current)
   }, [])
 
+  // Movement
   useEffect(() => {
     // Set initial character location at the middle
     function handleMovements(e: PointerEvent | KeyboardEvent) {

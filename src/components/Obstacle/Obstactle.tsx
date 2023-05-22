@@ -20,29 +20,10 @@ const Obstacle = memo(function ({ image, style, items }: {
     const obsRef = useRef<HTMLDivElement>(null)
     const obsImgRef = useRef<HTMLImageElement>(null)
     const lottieRef = useRef<LottieRefCurrentProps>(null)
-    const dialogRef = useRef<HTMLDialogElement>(null)
 
     const [isCharNear, setIsCharNear] = useState(false)
-    const [charHolder, setCharHolder] = useState<HTMLDivElement | null>(null)
     // Can't directly use .style for some reason (readonly)
     const [lottieClass, setLottieClass] = useState<'textBubble' | 'none'>('none')
-    
-    const handleModal = useCallback(function () {
-        const dialog = dialogRef.current
-        if (!dialog || !isCharNear) return
-
-        if (dialog.open) {
-            // Disconnect character to disable movement
-            charStore.setCharacter(charHolder)
-            setCharHolder(null)
-            dialog.close()
-        } else {
-            // Reconnect character to allow movement
-            setCharHolder(charStore.character)
-            charStore.setCharacter(null)
-            dialog.showModal()
-        }
-    }, [dialogRef.current?.open, isCharNear])
 
 
     // For collision
@@ -152,16 +133,6 @@ const Obstacle = memo(function ({ image, style, items }: {
             lottie.goToAndPlay(22, true)
         }
 
-        function interactModal(e: KeyboardEvent) {
-            const dialog = dialogRef.current
-            if (e.code !== 'KeyQ' || !dialog) return
-            else if (isCharNear && !dialog.open) handleModal()
-        }
-
-        window.addEventListener('keydown', interactModal)
-        return () => {
-            window.removeEventListener('keydown', interactModal)
-        }
     }, [isCharNear])
 
     return (
@@ -184,9 +155,8 @@ const Obstacle = memo(function ({ image, style, items }: {
                 src={image}
             />
             <ItemsDialog
-                ref={dialogRef}
-                handleModal={handleModal}
                 items={items}
+                isCharNear={isCharNear}
             />
         </div>
     )
