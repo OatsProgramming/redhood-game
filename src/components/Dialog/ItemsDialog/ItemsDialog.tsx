@@ -13,7 +13,7 @@ export default function ItemsDialog({ items, isCharNear }: {
 
     const handleModal = useCallback(function () {
         const dialog = dialogRef.current
-        if (!dialog || !isCharNear) return
+        if (!dialog) return
 
         if (dialog.open) {
             // Reconnect character to allow movement
@@ -26,21 +26,21 @@ export default function ItemsDialog({ items, isCharNear }: {
             setCharacter(null)
             dialog.showModal()
         }
+        
     }, [dialogRef.current?.open, isCharNear])
-    
 
     useEffect(() => {
         function interactModal(e: KeyboardEvent) {
             const dialog = dialogRef.current
-            if (e.code !== 'KeyQ' || !dialog) return
-            else if (isCharNear) handleModal()
+            if (e.code !== 'KeyQ' || !dialog || !isCharNear) return
+            handleModal()
         }
 
         window.addEventListener('keydown', interactModal)
         return () => {
             window.removeEventListener('keydown', interactModal)
         }
-    }, [isCharNear])
+    }, [dialogRef.current?.open, isCharNear])
 
     return (
         <dialog ref={dialogRef} className="itemsDialog">

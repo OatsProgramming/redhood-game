@@ -1,11 +1,12 @@
 import { memo, useRef } from 'react'
 import './itemCard.css'
 import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
+import isEqual from 'lodash/isEqual'
 
 const ItemCard = memo(function ({ item }: {
     item: Item
 }) {
-
+    console.log('asd')
     return (
         <li className='itemCard'>
             <img
@@ -20,6 +21,6 @@ const ItemCard = memo(function ({ item }: {
             <DetailsDialog item={item}/>
         </li>
     )
-})
+}, (prevProps, nextProps) => isEqual(prevProps, nextProps))
 
 export default ItemCard
