@@ -11,9 +11,23 @@
     background-color: rgba(0, 0, 0, 0.5)
 }
 
+/* Brute force for centering (itll do for now) */
 .itemsDialog > ul {
+    position: relative;
+    left: -1.5%;
     display: flex;
     flex-wrap: wrap;
     row-gap: 3rem;
     column-gap: 1rem;
+    justify-content: center;
+    /* border: 10px solid green; */
+}
+
+@media (max-width: 640px) {
+    .itemsDialog > ul > li {
+        scale: 0.9
+    }
+    .itemsDialog > ul {
+        left: -3%;
+    }
 }
