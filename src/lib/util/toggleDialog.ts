@@ -28,6 +28,10 @@ export default function toggleDialog(
 
         dialog.close()
     } else {
+        // Make sure that multiple dialogs (that arent related) arent all open at the same time
+        // Otherwise, will cause character reconnection issues
+        if (cache.has('current')) return
+        
         // Disconnect character to disable movement
         cache.set('current', character)
         setCharacter(null)
