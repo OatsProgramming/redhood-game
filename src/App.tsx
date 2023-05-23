@@ -1,8 +1,12 @@
+import { lazy } from "react";
 import Character from "./components/Character/Character";
-import InventoryDialog from "./components/Dialog/InventoryDialog/InventoryDialog";
 import InteractBtns from "./components/InteractBtns/InteractBtns";
 import Obstacle from "./components/Obstacle/Obstactle";
 import { food, food2 } from "./lib/items";
+
+const InventoryDialog = lazy(() => 
+  import('./components/Dialog/InventoryDialog/InventoryDialog')
+)
 
 export default function App() {
   return (

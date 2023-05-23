@@ -1,12 +1,19 @@
-import { CSSProperties, memo, useCallback, useEffect, useRef, useState } from "react"
+import { CSSProperties, lazy, memo, useEffect, useRef, useState } from "react"
 import useCharacter from "../../lib/zustand/characterStore"
-import Lottie, { LottieRefCurrentProps } from "lottie-react";
+import type { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
 import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
 import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
-import ItemsDialog from "../Dialog/ItemsDialog/ItemsDialog";
+
+const ItemsDialog = lazy(() => 
+    import('../Dialog/ItemsDialog/ItemsDialog')
+)
+
+const Lottie = lazy(() => 
+    import('lottie-react')
+)
 
 const Obstacle = memo(function ({ image, style, items }: {
     image: string,
