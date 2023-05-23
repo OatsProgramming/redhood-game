@@ -2,16 +2,17 @@ import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo } fro
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
-export default function DetailsDialog ({ item, rectImg }: {
+export default function DetailsDialog ({ item, rectImg, inInventory }: {
     item: Item,
     rectImg: string,
+    inInventory: boolean
 }) {
     const [amnt, setAmnt] = useState(0)
     const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
 
     // useMemo since character movement rerenders components
-    const inInventory = useMemo(function () {
+    const itemInInventory = useMemo(function () {
         return inventory.find(inventoryItem => inventoryItem.name === item.name )
     }, [inventory])
 
@@ -53,9 +54,8 @@ export default function DetailsDialog ({ item, rectImg }: {
 
     return (
         <>
-            <button onPointerDown={handleModal}>
-                Details
-            </button>
+            {/* Removed button to make it more neat */}
+            <div className="clickable" onPointerDown={handleModal} />
             <dialog className='details' ref={dialogRef} style={{ backgroundImage: `url(${rectImg})`}}>
                 {/* Added detailsContainer: cant directly change display of dialog w/o it going haywire */}
                 <div className='detailsContainer'>
@@ -66,7 +66,7 @@ export default function DetailsDialog ({ item, rectImg }: {
                         alt={item.name}
                     />
                     <div className='currentAmnt'>
-                        In inventory: {inInventory ? inInventory.amnt : 0}
+                        In inventory: {itemInInventory ? itemInInventory.amnt : 0}
                     </div>
                     <div className='description'>
                         {item.description}
