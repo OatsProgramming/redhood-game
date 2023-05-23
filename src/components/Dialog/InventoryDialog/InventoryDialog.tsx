@@ -2,12 +2,12 @@ import { useEffect, useRef, useState, PointerEvent, useCallback, useMemo } from 
 import './inventoryDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 import toggleModal from "../../../lib/util/toggleDialog";
-import useCharacter from "../../../lib/zustand/characterStore";
+import useCharMove from "../../../lib/zustand/charMoveStore";
 import ItemCard from "../../ItemCard/ItemCard";
 
 export default function InventoryDialog() {
     const { inventory } = useInventory()
-    const { character, setCharacter } = useCharacter()
+    const { character, setCharacter } = useCharMove()
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [category, setCategory] = useState<Category>('armor')
 

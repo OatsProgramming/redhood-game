@@ -1,7 +1,12 @@
 import { create } from 'zustand'
 import isEqual from 'lodash/isEqual'
 
-const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
+/**
+ * For character movement. Move via keyboard or pointer.
+ * 
+ */
+
+const useCharMove = create<CharMoveState & CharMoveAction>()((set, get) => ({
     character: null,
     animation: 'stand',
     move: { x: 0, y: 0 },
@@ -177,4 +182,4 @@ const useCharacter = create<CharacterState & CharacterAction>()((set, get) => ({
     }
 }))
 
-export default useCharacter
+export default useCharMove

@@ -1,17 +1,17 @@
 import { CSSProperties, lazy, memo, useEffect, useRef, useState } from "react"
-import useCharacter from "../../lib/zustand/characterStore"
 import type { LottieRefCurrentProps } from "lottie-react";
 import './obstacle.css'
 import textBubble from '../../assets/textBubble.json'
 import charLocator from "../../lib/util/charLocator";
 import keyCollision from "../../lib/util/keyCollision";
 import pointerCollision from "../../lib/util/pointerCollision";
+import useCharMove from "../../lib/zustand/charMoveStore";
 
-const ItemsDialog = lazy(() => 
+const ItemsDialog = lazy(() =>
     import('../Dialog/ItemsDialog/ItemsDialog')
 )
 
-const Lottie = lazy(() => 
+const Lottie = lazy(() =>
     import('lottie-react')
 )
 
@@ -22,7 +22,7 @@ const Obstacle = memo(function ({ image, style, items }: {
     // Use scale only for resizing; otherwise, will affect the collision borders
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
 }) {
-    const charStore = useCharacter()
+    const charStore = useCharMove()
 
     const obsRef = useRef<HTMLDivElement>(null)
     const obsImgRef = useRef<HTMLImageElement>(null)
@@ -167,7 +167,7 @@ const Obstacle = memo(function ({ image, style, items }: {
             />
         </div>
     )
-}, (prevProps, nextProps) => {  
+}, (prevProps, nextProps) => {
     return prevProps.image === nextProps.image
 })
 

@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import './character.css'
-import useCharacter from '../../lib/zustand/characterStore'
+import useCharacter from '../../lib/zustand/charMoveStore'
 
 export default function Character() {
   const divRef = useRef<HTMLDivElement>(null)

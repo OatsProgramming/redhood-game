@@ -3,7 +3,7 @@ type AnimNames = 'stand' | 'walk' | 'run' | 'jump'
 
 type Position = { x: number, y: number }
 
-type CharacterState = {
+type CharMoveState = {
     character: HTMLDivElement | null,
     animation: AnimNames,
     move: Position,
@@ -12,7 +12,7 @@ type CharacterState = {
     secondTimer: number | null,
 }
 
-type CharacterAction = {
+type CharMoveAction = {
     moveByKey: (e: KeyboardEvent) => void,
     toStand: (e: KeyboardEvent) => void,
     moveByPointer: (e: PointerEvent) => void,

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import './itemsDialog.css'
 import ItemCard from "../../ItemCard/ItemCard";
-import useCharacter from "../../../lib/zustand/characterStore";
+import charMove from "../../../lib/zustand/charMoveStore";
 import toggleDialog from "../../../lib/util/toggleDialog";
 
 export default function ItemsDialog({ items, isCharNear }: {
@@ -9,7 +9,7 @@ export default function ItemsDialog({ items, isCharNear }: {
     isCharNear: boolean
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
-    const { character, setCharacter } = useCharacter()
+    const { character, setCharacter } = charMove()
 
     useEffect(() => {
         function interactModal(e: KeyboardEvent) {
@@ -28,12 +28,12 @@ export default function ItemsDialog({ items, isCharNear }: {
         <dialog ref={dialogRef} className="itemsDialog">
             <ul>
                 {items.map(item => (
-                    <ItemCard 
-                        key={item.name} 
+                    <ItemCard
+                        key={item.name}
                         item={item}
                         squareImg="https://i.imgur.com/zpWAtja.png"
                         rectImg="'https://i.imgur.com/TTSJ7yA.png'"
-                        />
+                    />
                 ))}
             </ul>
             <button className="closeBtn" onClick={() => toggleDialog(dialogRef, character, setCharacter)}>
