@@ -61,7 +61,7 @@ export default function Character() {
       }}>
       <img
         className={animation}
-        src='/character2.png'
+        src='/character3.png'
       />
     </div>
   )
