@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, PointerEvent, useCallback, useRef } from "react";
+import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
@@ -7,8 +7,12 @@ export default function DetailsDialog ({ item, rectImg }: {
     rectImg: string,
 }) {
     const [amnt, setAmnt] = useState(0)
-    const { addItem, removeItem } = useInventory()
+    const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
+
+    const inInventory = useMemo(function () {
+        return inventory.find(inventoryItem => inventoryItem.name === item.name )
+    }, [inventory])
 
     // Drag
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
@@ -27,6 +31,7 @@ export default function DetailsDialog ({ item, rectImg }: {
         })
     }, [])
 
+    // Temporary
     const handleRemoval = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
         const btn = e.target as HTMLButtonElement
         const amnt = Number(btn.textContent)
@@ -60,7 +65,7 @@ export default function DetailsDialog ({ item, rectImg }: {
                         alt={item.name}
                     />
                     <div className='currentAmnt'>
-                        Currently have:
+                        In inventory: {inInventory ? inInventory.amnt : 0}
                     </div>
                     <div className='description'>
                         {item.description}
