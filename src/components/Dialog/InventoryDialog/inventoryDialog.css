@@ -58,3 +58,15 @@
     overflow: scroll;
     overflow-x: hidden;
 }
+
+.empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+}
+
+.empty > img {
+    width: 25%;
+    filter: invert(1);
+    opacity: 50%;
+}

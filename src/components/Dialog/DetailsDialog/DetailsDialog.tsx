@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, PointerEvent, useCallback, useRef } from "react";
+import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
@@ -10,9 +10,10 @@ export default function DetailsDialog ({ item, rectImg }: {
     const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
 
-    const inInventory = useCallback(function () {
+    // useMemo since character movement rerenders components
+    const inInventory = useMemo(function () {
         return inventory.find(inventoryItem => inventoryItem.name === item.name )
-    }, [inventory])()
+    }, [inventory])
 
     // Drag
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {

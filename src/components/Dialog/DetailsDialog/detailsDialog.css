@@ -28,6 +28,7 @@
         "amnt btn"
     ;
     place-items: center;
+    scale: 0.95;
 }
 
 .detailsContainer > img {
@@ -60,6 +61,7 @@
 
 @media (max-width: 640px) {
     .detailsContainer {
+        top: 0;
         scale: 0.8
     }
 }
