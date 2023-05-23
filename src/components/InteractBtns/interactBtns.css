@@ -7,12 +7,13 @@
         "left down right"
     ;
     bottom: 5vh;
-    right: 5vw
+    right: 5vw;
 }
 
 .interactBtns > button {
     width: clamp(65px, 10vw, 100px);
     opacity: 0.5;
+    touch-action: none;
 }
 
 .interactBtns > button:hover {

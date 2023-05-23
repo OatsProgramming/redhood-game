@@ -21,7 +21,7 @@ const ItemCard = memo(function ({ item, squareImg, rectImg, inInventory }: {
                 src={item.imgUrl}
                 width={100}
             />
-            <div>
+            <div className='info'>
                 <p>{item.name}</p>
                 {
                     isInventoryItem(item, inInventory) ?

@@ -13,7 +13,7 @@
 /* Reminder: dont put display: flex or grid here */
 /* Will create css issues */
 .details {
-    width: clamp(350px, 50vw, 500px);
+    width: clamp(300px, 50vw, 500px);
     aspect-ratio: 19 / 9;
     background-position: center;
     background-size: cover;
@@ -35,8 +35,8 @@
     height: 80%;
     display: grid;
     grid-template-areas: 
-        "img description"
         "img drag"
+        "description drag"
         "amnt btn"
     ;
     place-items: center;
@@ -60,6 +60,10 @@
 
 .description {
     grid-area: description;
+    text-align: center;
+    /* border: 5px solid green; */
+    height: 5ch;
+    overflow: scroll;
 }
 
 .btnContainer {

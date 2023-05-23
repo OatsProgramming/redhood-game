@@ -67,6 +67,7 @@ export default function InventoryDialog() {
                             item={item}
                             squareImg='https://i.imgur.com/vkHFpib.png'
                             rectImg="https://i.imgur.com/yhXHKa8.png"
+                            inInventory
                         />
                     ))
                 ) : (
