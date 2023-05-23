@@ -3,6 +3,10 @@ import './inventoryDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 import toggleModal from "../../../lib/util/toggleDialog";
 import useCharacter from "../../../lib/zustand/characterStore";
+import ItemCard from "../../ItemCard/ItemCard";
+
+// Temporary
+import { food } from "../../../lib/items";
 
 export default function InventoryDialog() {
     const { inventory } = useInventory()
@@ -34,6 +38,16 @@ export default function InventoryDialog() {
                 <img className="bone"
                     src="https://i.imgur.com/qLY7kv1.png"
                 />
+            </div>
+            <div className="items">
+                {food.map(item => (
+                    <ItemCard
+                        key={item.name}
+                        item={item}
+                        squareImg='https://i.imgur.com/vkHFpib.png'
+                        rectImg="https://i.imgur.com/yhXHKa8.png"
+                    />
+                ))}
             </div>
         </dialog>
     )
