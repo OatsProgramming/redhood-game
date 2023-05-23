@@ -9,4 +9,13 @@
     background-size: cover;
     background-repeat: no-repeat;
     color: black;
+    position: relative;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .itemCard {
+        width: 150px;
+        height: 150px
+    }
 }
