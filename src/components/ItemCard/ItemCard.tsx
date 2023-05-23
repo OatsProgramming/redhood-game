@@ -3,12 +3,15 @@ import './itemCard.css'
 import DetailsDialog from '../Dialog/DetailsDialog/DetailsDialog'
 import isEqual from 'lodash/isEqual'
 
-const ItemCard = memo(function ({ item }: {
-    item: Item
+const ItemCard = memo(function ({ item, squareImg, rectImg}: {
+    item: Item,
+    squareImg: string,
+    rectImg: string,
 }) {
-    console.log('asd')
     return (
-        <li className='itemCard'>
+        <li className='itemCard' style={{
+            backgroundImage: `url(${squareImg})`
+        }}>
             <img
                 loading='lazy'
                 src={item.imgUrl}
@@ -18,7 +21,7 @@ const ItemCard = memo(function ({ item }: {
                 <p>{item.name}</p>
                 <p>{item.price}</p>
             </div>
-            <DetailsDialog item={item}/>
+            <DetailsDialog item={item} rectImg={rectImg}/>
         </li>
     )
 }, (prevProps, nextProps) => isEqual(prevProps, nextProps))

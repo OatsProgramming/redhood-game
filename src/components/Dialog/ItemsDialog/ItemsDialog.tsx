@@ -28,7 +28,12 @@ export default function ItemsDialog({ items, isCharNear }: {
         <dialog ref={dialogRef} className="itemsDialog">
             <ul>
                 {items.map(item => (
-                    <ItemCard key={item.name} item={item} />
+                    <ItemCard 
+                        key={item.name} 
+                        item={item}
+                        squareImg="https://i.imgur.com/zpWAtja.png"
+                        rectImg="'https://i.imgur.com/TTSJ7yA.png'"
+                        />
                 ))}
             </ul>
             <button className="closeBtn" onClick={() => toggleDialog(dialogRef, character, setCharacter)}>

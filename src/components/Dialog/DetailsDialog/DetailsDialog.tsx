@@ -2,8 +2,9 @@ import { useState, ChangeEvent, PointerEvent, useCallback, useRef } from "react"
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 
-export default function DetailsDialog ({ item }: {
-    item: Item
+export default function DetailsDialog ({ item, rectImg }: {
+    item: Item,
+    rectImg: string,
 }) {
     const [amnt, setAmnt] = useState(0)
     const { addItem, removeItem } = useInventory()
@@ -49,7 +50,7 @@ export default function DetailsDialog ({ item }: {
             <button onPointerDown={handleModal}>
                 Details
             </button>
-            <dialog className='details' ref={dialogRef}>
+            <dialog className='details' ref={dialogRef} style={{ backgroundImage: `url(${rectImg})`}}>
                 {/* Added detailsContainer: cant directly change display of dialog w/o it going haywire */}
                 <div className='detailsContainer'>
                     <img
@@ -65,8 +66,8 @@ export default function DetailsDialog ({ item }: {
                         {item.description}
                     </div>
                     <div className='drag'>
-                        <p>Amount: {amnt}</p>
-                        <p>Cost: {amnt * item.price}</p>
+                        <div>Amount: {amnt}</div>
+                        <div>Cost: {amnt * item.price}</div>
                         <label htmlFor="drag">Buy? (0 - 50)</label>
                         <input value={amnt} type="range" name="drag" min="0" max="50" onChange={handleChange} />
                         <div>

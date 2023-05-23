@@ -1,16 +1,20 @@
+
 .details {
     width: clamp(150px, 50vw, 500px);
     aspect-ratio: 19 / 9;
-    background-image: url('https://i.imgur.com/TTSJ7yA.png');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-color: transparent;
     border: none;
+    overflow: hidden;
+    /* position: relative; */
+    border: 5px solid red;
 }
 
 .detailsContainer {
-    height: 100%;
+    /* position: absolute; */
+    height: max-content;
     display: grid;
     grid-template-areas: 
         "img description description"
@@ -18,11 +22,11 @@
         "amnt btn btn"
     ;
     place-items: center;
+    border: 5px solid green
 }
 
 .detailsContainer > img {
     grid-area: img;
-    
 }
 
 .currentAmnt {
