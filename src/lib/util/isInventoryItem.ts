@@ -1,7 +1,7 @@
 /**
  * Stores previous item.amnt . Used to compare with new item.amnt when rerendering
  */
-export const itemCache = new Map<InventoryItem | Item, number>()
+export const itemCache = new WeakMap<InventoryItem | Item, number>()
 
 /**
  * To not only determine it's type, but to also cache item.amnt if inInventory.

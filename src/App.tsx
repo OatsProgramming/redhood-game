@@ -3,6 +3,7 @@ import Character from "./components/Character/Character";
 import InteractBtns from "./components/InteractBtns/InteractBtns";
 import Obstacle from "./components/Obstacle/Obstactle";
 import { food, food2 } from "./lib/items";
+import Test from "./components/Test";
 
 const InventoryDialog = lazy(() => 
   import('./components/Dialog/InventoryDialog/InventoryDialog')
@@ -43,6 +44,8 @@ export default function App() {
         }}
       />
       <InventoryDialog />
+      {/* <Test />
+      <Test /> */}
     </>
   )
 }
