@@ -45,6 +45,7 @@ type Item = {
     imgUrl: string,
     price: number,
     category: Category,
+    addHP?: number,
 }
 
 type InventoryItem = Item & {

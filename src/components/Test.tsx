@@ -1,34 +1,21 @@
 import useCharStats from "../lib/zustand/charStatsStore";
 
 export default function Test() {
-    const { debuffSet, updateDebuff } = useCharStats()
+    const { coins, hp } = useCharStats()
     return (
         <>
             <h1 style={{
-                border: '10px solid red',
-                width: '100vw',
+                border: '5px solid green',
                 color: 'black',
             }}>
-                {JSON.stringify([...debuffSet])}
+                COINS: { coins }
             </h1>
-            <button onClick={() => updateDebuff('Hello', true)}>
-                hello add
-            </button>
-            <button onClick={() => updateDebuff('Hello')}>
-                hello sub
-            </button>
-            <button onClick={() => updateDebuff('world', true)}>
-                world add
-            </button>
-            <button onClick={() => updateDebuff('world')}>
-                world sub
-            </button>
-            <button onClick={() => updateDebuff('goodbye', true)}>
-                goodbye add
-            </button>
-            <button onClick={() => updateDebuff('goodbye')}>
-                goodbye sub
-            </button>
+            <h1 style={{
+                border: '5px solid red',
+                color: 'black',
+            }}>
+                HP: { hp }
+            </h1>
         </>
     )
 }

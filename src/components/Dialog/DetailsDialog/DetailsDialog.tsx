@@ -1,21 +1,41 @@
 import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
+import useCharStats from "../../../lib/zustand/charStatsStore";
 
-export default function DetailsDialog({ item, rectImg, inInventory }: {
+export default function DetailsDialog({ item, rectImg, inInventory, isSelling }: {
     item: Item,
     rectImg: string,
-    inInventory: boolean
+    // To determine if dealing with InventoryItem or Item
+    inInventory: boolean,
+    isSelling: boolean
 }) {
     const [amnt, setAmnt] = useState(0)
+    const { coins, updateCoins, updateHP } = useCharStats()
     const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
 
+    const resaleRate = 0.75
+    const itemCoins = isSelling ?
+        // Round it to keep currency system simple (account for precision loss)
+        Math.round(Math.round((item.price * resaleRate) * 10) / 10)
+        : item.price
+    
     // useMemo since character movement rerenders components
-    const itemInInventory = useMemo(function () {
+    const itemInInventory = useMemo(() => {
         return inventory.find(inventoryItem => inventoryItem.name === item.name)
     }, [inventory])
 
+    // Determine if max will be based on user's inventory or user's current amnt of coins
+    const dragMax = useMemo(() => {
+        if (inInventory || isSelling) {
+            return itemInInventory?.amnt ?? 0
+        }
+        // Account for possible precision loss
+        let initDM = Math.round((coins / item.price) * 10) / 10
+        return Math.round(initDM)
+    }, [itemInInventory?.amnt, coins, isSelling, inInventory])
+    
     // Drag
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
@@ -36,9 +56,25 @@ export default function DetailsDialog({ item, rectImg, inInventory }: {
     // Deal with whether user consumes or buys item
     const handleConfirm = useCallback(function () {
         const inventoryItem: InventoryItem = { ...item, amnt }
-        if (inInventory) removeItem(inventoryItem)
-        else addItem(inventoryItem)
-    }, [amnt])
+
+        // If dealing w/ InventoryItem type
+        if (inInventory || isSelling) {
+            if (!itemInInventory) return
+            // If ingestible
+            else if (inInventory && item.addHP) updateHP(amnt * item.addHP)
+            // if selling
+            else updateCoins(amnt * itemCoins)
+            removeItem(inventoryItem)
+        }
+
+        // if dealing w/ Item type
+        else {
+            const cost = -(amnt * item.price)
+            updateCoins(cost)
+            addItem(inventoryItem)
+        }
+
+    }, [amnt, isSelling, inInventory])
 
     const handleModal = useCallback(function () {
         const dialog = dialogRef.current
@@ -62,17 +98,21 @@ export default function DetailsDialog({ item, rectImg, inInventory }: {
                         alt={item.name}
                     />
                     <div className='currentAmnt'>
-                        In inventory: {itemInInventory ? itemInInventory.amnt : 0}
+                        In inventory: {itemInInventory?.amnt ?? 0}
                     </div>
                     <div className='description'>
                         {item.description}
                     </div>
                     <div className='drag'>
                         <div>Amount: {amnt}</div>
-                        {!inInventory && (<div>Cost: {amnt * item.price}</div>)}
+                        {!inInventory &&
+                            <div>
+                                {isSelling ? 'Sell for' : 'Cost'}: {itemCoins}
+                            </div>
+                        }
                         {!inInventory && (
                             <label htmlFor="drag">
-                                Max: 50
+                                Max: {dragMax}
                             </label>
                         )}
                         <input
@@ -80,8 +120,8 @@ export default function DetailsDialog({ item, rectImg, inInventory }: {
                             type="range"
                             name="drag"
                             min="0"
-                            max={inInventory ? itemInInventory?.amnt : 50}
-                            onChange={handleChange} 
+                            max={dragMax}
+                            onChange={handleChange}
                         />
                         <div>
                             <button onPointerDown={handleClick}>

@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import './itemsDialog.css'
 import ItemCard from "../../ItemCard/ItemCard";
 import charMove from "../../../lib/zustand/charMoveStore";
 import toggleDialog from "../../../lib/util/toggleDialog";
+import useInventory from "../../../lib/zustand/inventoryStore";
 
 export default function ItemsDialog({ items, isCharNear }: {
     items: Item[],
@@ -10,6 +11,18 @@ export default function ItemsDialog({ items, isCharNear }: {
 }) {
     const dialogRef = useRef<HTMLDialogElement>(null)
     const { character, setCharacter } = charMove()
+    const [itemList, setItemList] = useState(items)
+    const [isSelling, setIsSelling] = useState(false)
+    const { inventory } = useInventory()
+    
+    useEffect(() => {
+        if (isSelling) {
+            setItemList(() => 
+                inventory.filter(inventoryItem => inventoryItem.category === items[0].category)
+            )
+        }
+        else setItemList(items)
+    }, [isSelling])
 
     useEffect(() => {
         function interactModal(e: KeyboardEvent) {
@@ -26,13 +39,17 @@ export default function ItemsDialog({ items, isCharNear }: {
 
     return (
         <dialog ref={dialogRef} className="itemsDialog">
+            <div onPointerDown={() => setIsSelling(!isSelling)}>
+                {isSelling ? 'Buy items' : 'Sell items'}
+            </div>
             <ul>
-                {items.map(item => (
+                {itemList.map(item => (
                     <ItemCard
                         key={item.name}
                         item={item}
                         squareImg="https://i.imgur.com/zpWAtja.png"
                         rectImg="'https://i.imgur.com/TTSJ7yA.png'"
+                        isSelling={isSelling}
                     />
                 ))}
             </ul>

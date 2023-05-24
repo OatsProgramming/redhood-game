@@ -44,8 +44,8 @@ export default function App() {
         }}
       />
       <InventoryDialog />
-      {/* <Test />
-      <Test /> */}
+      <Test />
+      {/* <Test /> */}
     </>
   )
 }
