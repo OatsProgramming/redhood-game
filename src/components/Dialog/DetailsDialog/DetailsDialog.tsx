@@ -40,18 +40,21 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
     const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
         const input = e.target
         setAmnt(Number(input.value))
-    }, [])
+    }, [dragMax])
 
     // Button
     const handleClick = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
+        // Limit is zero
+        if (!dragMax) return
+
         const btn = e.target as HTMLButtonElement
         const value = Number(btn.textContent)
-        setAmnt(state => {
-            const newAmnt = state + value
-            if (newAmnt < 0) return state
-            return newAmnt
-        })
-    }, [])
+        const newAmnt = amnt + value
+
+        // Make sure it doesnt go over or under the limit
+        if (newAmnt < 0 || newAmnt > dragMax) return
+        setAmnt(newAmnt)
+    }, [dragMax, amnt])
 
     // Deal with whether user consumes or buys item
     const handleConfirm = useCallback(function () {
