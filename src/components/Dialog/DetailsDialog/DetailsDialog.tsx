@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo } from "react";
+import { useState, ChangeEvent, PointerEvent, useCallback, useRef, useMemo, useEffect } from "react";
 import './detailsDialog.css'
 import useInventory from "../../../lib/zustand/inventoryStore";
 import useCharStats from "../../../lib/zustand/charStatsStore";
@@ -14,14 +14,16 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
     const { coins, updateCoins, updateHP } = useCharStats()
     const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
 
-    const resaleRate = 0.75
-    const itemCoins = isSelling ?
-        // Round it to keep currency system simple (account for precision loss)
-        Math.round(Math.round((item.price * resaleRate) * 10) / 10)
-        : item.price
-    
-    // useMemo since character movement rerenders components
+    const itemCoins = useMemo(() => {
+        const resaleRate = 0.75
+        return isSelling ?
+            // Round it to keep currency system simple (account for precision loss)
+            Math.round(Math.round((item.price * resaleRate) * 10) / 10)
+            : item.price
+    }, [item])
+
     const itemInInventory = useMemo(() => {
         return inventory.find(inventoryItem => inventoryItem.name === item.name)
     }, [inventory])
@@ -33,20 +35,15 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
         }
         // Account for possible precision loss
         let initDM = Math.round((coins / item.price) * 10) / 10
-        return Math.round(initDM)
+        return Math.floor(initDM)
     }, [itemInInventory?.amnt, coins, isSelling, inInventory])
     
-    // Drag
-    const handleChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
+    const mutateAmntByDrag = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const input = e.target
         setAmnt(Number(input.value))
     }, [dragMax])
 
-    // Button
-    const handleClick = useCallback(function (e: PointerEvent<HTMLButtonElement>) {
-        // Limit is zero
-        if (!dragMax) return
-
+    const mutateAmntByClick = useCallback((e: PointerEvent<HTMLButtonElement>) => {
         const btn = e.target as HTMLButtonElement
         const value = Number(btn.textContent)
         const newAmnt = amnt + value
@@ -57,10 +54,10 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
     }, [dragMax, amnt])
 
     // Deal with whether user consumes or buys item
-    const handleConfirm = useCallback(function () {
+    const mutateInventory = useCallback(() => {
         const inventoryItem: InventoryItem = { ...item, amnt }
 
-        // If dealing w/ InventoryItem type
+        // If dealing w/ user's items type
         if (inInventory || isSelling) {
             if (!itemInInventory) return
             // If ingestible
@@ -70,7 +67,7 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
             removeItem(inventoryItem)
         }
 
-        // if dealing w/ Item type
+        // If dealing w/ store items
         else {
             const cost = -(amnt * item.price)
             updateCoins(cost)
@@ -79,13 +76,19 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
 
     }, [amnt, isSelling, inInventory])
 
-    const handleModal = useCallback(function () {
+    const handleModal = useCallback(() => {
         const dialog = dialogRef.current
         if (!dialog) return
 
         if (dialog.open) dialog.close()
         else dialog.showModal()
     }, [dialogRef.current])
+
+    // Make sure amnt state never goes over dragMax
+    useEffect(() => {
+        if (!inputRef.current) return
+        setAmnt(Number(inputRef.current.value))
+    }, [dragMax, inputRef.current, inInventory])
 
     return (
         <>
@@ -109,28 +112,29 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
                     <div className='drag'>
                         <div>Amount: {amnt}</div>
                         {!inInventory &&
-                            <div>
-                                {isSelling ? 'Sell for' : 'Cost'}: {itemCoins}
-                            </div>
+                            <>
+                                <div>
+                                    {isSelling ? 'Sell for' : 'Cost'}: {itemCoins}
+                                </div>
+                                <label htmlFor="drag">
+                                    Max: {dragMax}
+                                </label>
+                            </>
                         }
-                        {!inInventory && (
-                            <label htmlFor="drag">
-                                Max: {dragMax}
-                            </label>
-                        )}
                         <input
+                            ref={inputRef}
                             value={amnt}
                             type="range"
                             name="drag"
                             min="0"
                             max={dragMax}
-                            onChange={handleChange}
+                            onChange={mutateAmntByDrag}
                         />
                         <div>
-                            <button onPointerDown={handleClick}>
+                            <button onPointerDown={mutateAmntByClick}>
                                 -1
                             </button>
-                            <button onPointerDown={handleClick}>
+                            <button onPointerDown={mutateAmntByClick}>
                                 +1
                             </button>
                         </div>
@@ -139,7 +143,7 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
                         <button onPointerDown={handleModal}>
                             Cancel
                         </button>
-                        <button onPointerDown={handleConfirm}>
+                        <button onPointerDown={mutateInventory}>
                             Confirm
                         </button>
                     </div>
@@ -148,4 +152,3 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
         </>
     )
 }
-
