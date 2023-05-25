@@ -13,7 +13,7 @@ const food: Item[] = [
       imgUrl: 'https://i.imgur.com/iP4TrIW.png',
       price: 10,
       category: 'ingestible',
-      addHP: 0
+      addDebuff: 'Poison'
     },
     {
       name: 'Beer',

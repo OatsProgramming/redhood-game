@@ -5,13 +5,16 @@ import toggleModal from "../../../lib/util/toggleDialog";
 import useCharMove from "../../../lib/zustand/charMoveStore";
 import ItemCard from "../../ItemCard/ItemCard";
 import useCardType from "../../../lib/zustand/cardTypeStore";
+import useCharStats from "../../../lib/zustand/charStatsStore";
 
 export default function InventoryDialog() {
+    const { coins } = useCharStats()
     const { inventory } = useInventory()
+    const { setInInventory } = useCardType()
     const { character, setCharacter } = useCharMove()
+
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [category, setCategory] = useState<Category>('equipment')
-    const { setInInventory } = useCardType()
 
     // useMemo since character movement rerenders components
     const showItems = useMemo(function () {
@@ -61,6 +64,9 @@ export default function InventoryDialog() {
                     src="https://i.imgur.com/qLY7kv1.png"
                     loading="lazy"
                 />
+            </div>
+            <div className="coins">
+                {coins}
             </div>
             <div className="items">
                 {showItems.length > 0 ? (

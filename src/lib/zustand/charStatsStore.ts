@@ -2,24 +2,28 @@ import { create } from "zustand";
 
 type CharStatsStore = {
     hp: number,
+    maxHP: number,
     debuffSet: Set<string>,
     coins: number,
     updateHP: (toBeAdded: number) => void,
+    updateMaxHP: (toBeAdded: number) => void,
     updateCoins: (toBeAdded: number) => void,
     updateDebuff: (debuff: string, toBeAdded?: true) => void,
 }
 
 const useCharStats = create<CharStatsStore>()((set) => ({
     hp: 100,
-    debuffSet: new Set(),
+    maxHP: 200,
+    debuffSet: new Set(['Headache']),
     coins: 50_000,
     updateHP: (toBeAdded) => set(state => {
         const newHP = state.hp + toBeAdded
-
-        // If inflicting damage and hp in the negatives
+        // Dont go out of bounds
         if (newHP < 0) return { hp: 0 }
+        else if (newHP > state.maxHP) return { hp: state.maxHP }
         return { hp: newHP }
     }),
+    updateMaxHP: (toBeAdded) => set(state => ({ maxHP: state.maxHP + toBeAdded })),
     // Shouldnt have to worry about it going to the negatives
     updateCoins: (toBeAdded) => set(state => ({ coins: state.coins + toBeAdded })),
     updateDebuff: (debuff, toBeAdded) => set(state => {

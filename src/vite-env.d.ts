@@ -48,6 +48,7 @@ type Item = {
     addHP?: number,
     addDef?: number,
     addAtk?: number,
+    addDebuff?: string
 }
 
 type InventoryItem = Item & {

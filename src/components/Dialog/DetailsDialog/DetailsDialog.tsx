@@ -11,7 +11,7 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
     isSelling: boolean
 }) {
     const [amnt, setAmnt] = useState(0)
-    const { coins, updateCoins, updateHP } = useCharStats()
+    const { coins, updateCoins, updateHP, updateDebuff } = useCharStats()
     const { inventory, addItem, removeItem } = useInventory()
     const dialogRef = useRef<HTMLDialogElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -61,7 +61,10 @@ export default function DetailsDialog({ item, rectImg, inInventory, isSelling }:
         if (inInventory || isSelling) {
             if (!itemInInventory) return
             // If ingestible
-            else if (inInventory && item.addHP) updateHP(amnt * item.addHP)
+            else if (inInventory) {
+                if (item.addHP) updateHP(amnt * item.addHP)
+                if (item.addDebuff) updateDebuff(item.addDebuff, true)
+            }
             // if selling
             else updateCoins(amnt * itemCoins)
             removeItem(inventoryItem)

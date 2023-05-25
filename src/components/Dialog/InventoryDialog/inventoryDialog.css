@@ -70,3 +70,19 @@
     filter: invert(1);
     opacity: 50%;
 }
+
+.coins {
+    position: absolute;
+    top: min(1vw, 15px);
+    right: 10%;
+    color: rgb(213, 216, 38);
+    font-weight: bold;
+    font-family: pixelText, sans-serif;
+    font-size: small;
+}
+
+@media (min-width: 720px) {
+    .coins {
+        font-size: 1.25rem;
+    }
+}
