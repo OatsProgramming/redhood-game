@@ -3,10 +3,10 @@ import Character from "./components/Character/Character";
 import InteractBtns from "./components/InteractBtns/InteractBtns";
 import Obstacle from "./components/Obstacle/Obstactle";
 import food from "./lib/inGameObjs/food";
-import Test from "./components/Test";
+import StatsDisplay from "./components/StatsDisplay/StatsDisplay";
 import obstacleUrls from "./lib/inGameObjs/obstactleUrls";
 
-const InventoryDialog = lazy(() => 
+const InventoryDialog = lazy(() =>
   import('./components/Dialog/InventoryDialog/InventoryDialog')
 )
 
@@ -34,7 +34,7 @@ export default function App() {
         }}
       />
       <InventoryDialog />
-      <Test />
+      <StatsDisplay />
       {/* <Test /> */}
     </>
   )
