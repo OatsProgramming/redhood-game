@@ -10,7 +10,7 @@ export default function InventoryDialog() {
     const { inventory } = useInventory()
     const { character, setCharacter } = useCharMove()
     const dialogRef = useRef<HTMLDialogElement>(null)
-    const [category, setCategory] = useState<Category>('armor')
+    const [category, setCategory] = useState<Category>('equipment')
     const { setInInventory } = useCardType()
 
     // useMemo since character movement rerenders components

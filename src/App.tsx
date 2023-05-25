@@ -2,8 +2,9 @@ import { lazy } from "react";
 import Character from "./components/Character/Character";
 import InteractBtns from "./components/InteractBtns/InteractBtns";
 import Obstacle from "./components/Obstacle/Obstactle";
-import { food, food2 } from "./lib/items";
+import food from "./lib/inGameObjs/food";
 import Test from "./components/Test";
+import obstacleUrls from "./lib/inGameObjs/obstactleUrls";
 
 const InventoryDialog = lazy(() => 
   import('./components/Dialog/InventoryDialog/InventoryDialog')
@@ -15,31 +16,20 @@ export default function App() {
       <InteractBtns />
       <Character />
       <Obstacle
+        isInteractive
         items={food}
         image='/woodenCart.PNG'
         style={{
           top: '40vh',
           left: '25vw',
-          scale: '2'
+          scale: '1'
         }}
       />
-
       <Obstacle
-        items={food2}
-        image='/woodenCart.PNG'
+        image={obstacleUrls.bush}
         style={{
-          top: '80vh',
-          left: '25vw',
-          scale: '2'
-        }}
-      />
-
-      <Obstacle
-        items={food}
-        image='/woodenCart.PNG'
-        style={{
-          top: '20vh',
-          left: '2vw',
+          top: '30vh',
+          left: '10vw',
           scale: '1'
         }}
       />

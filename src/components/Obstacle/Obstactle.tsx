@@ -15,9 +15,10 @@ const Lottie = lazy(() =>
     import('lottie-react')
 )
 
-const Obstacle = memo(function ({ image, style, items }: {
+const Obstacle = memo(function ({ image, style, items, isInteractive }: {
     image: string,
-    items: Item[],
+    items?: Item[],
+    isInteractive?: true,
     // Don't mess with width or height: treat all objects present in window as paper cutouts
     // Use scale only for resizing; otherwise, will affect the collision borders
     style: RequiredStyles & Omit<CSSProperties, 'height' | 'width'>
@@ -82,6 +83,9 @@ const Obstacle = memo(function ({ image, style, items }: {
             obs.style.zIndex = '1'
         }
 
+        // Any further exec not necessary if cant interact with obstacle
+        if (!isInteractive) return
+
         // For text bubble
         const buffer = 30
         const { sideX, sideY } = charLocator(charRect, obsRect)
@@ -129,7 +133,7 @@ const Obstacle = memo(function ({ image, style, items }: {
     // Text bubble animation & modal
     useEffect(() => {
         const lottie = lottieRef.current
-        if (!lottie) return
+        if (!lottie || !isInteractive) return
 
         if (isCharNear) {
             setLottieClass('textBubble')
@@ -145,25 +149,28 @@ const Obstacle = memo(function ({ image, style, items }: {
     return (
         <div className="container" ref={obsRef} style={style}>
             <div className="shadow" />
-            <Lottie
-                className={lottieClass}
-                lottieRef={lottieRef}
-                animationData={textBubble}
-                loop={false}
-                // Prevent animation on initial load
-                onDOMLoaded={() => lottieRef.current?.stop()}
-                // Ensures that the animation gets to play then safely remove the element
-                onComplete={() => !isCharNear && setLottieClass('none')}
-            />
+            {isInteractive && (
+                <Lottie
+                    className={lottieClass}
+                    lottieRef={lottieRef}
+                    animationData={textBubble}
+                    loop={false}
+                    // Prevent animation on initial load
+                    onDOMLoaded={() => lottieRef.current?.stop()}
+                    // Ensures that the animation gets to play then safely remove the element
+                    onComplete={() => !isCharNear && setLottieClass('none')}
+                />
+            )}
+            {items && (
+                <ItemsDialog
+                    items={items}
+                    isCharNear={isCharNear}
+                />
+            )}
             <img
-                loading="lazy"
                 ref={obsImgRef}
                 className="obstacle"
                 src={image}
-            />
-            <ItemsDialog
-                items={items}
-                isCharNear={isCharNear}
             />
         </div>
     )

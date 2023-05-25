@@ -2,7 +2,7 @@
 /* Change via scale */
 .container {
     position: fixed;
-    /* border: 5px solid red; */
+    /* border: 5px solid green; */
     width: 100px;
     height: 10px;
 }
@@ -12,10 +12,11 @@
     translate: 0px -90px;
     position: absolute;
     /* border: 5px solid red; */
+    display: block;
 }
 
 .shadow {
-    position: absolute;
+    position: relative;
     background-color: hsl(0, 0%, 0%);
     width: 100px;
     -webkit-box-shadow: 0px 0px 9px 7px hsla(0, 0%, 0%, 0.75);
