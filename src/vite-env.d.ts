@@ -8,8 +8,8 @@ type CharMoveState = {
     animation: AnimNames,
     move: Position,
     isGoing: boolean,
-    firstTimer: number | null,
-    secondTimer: number | null,
+    firstTimer: NodeJS.Timeout | null,
+    secondTimer: NodeJS.Timeout | null,
 }
 
 type CharMoveAction = {

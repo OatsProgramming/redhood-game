@@ -4,8 +4,8 @@ import btns from './btnList'
 
 export default function InteractBtns() {
     const [isRunning, setIsRunning] = useState(false)
-    const [firstTimer, setFirstTimer] = useState(0)
-    const [secondTimer, setSecondTimer] = useState(0)
+    const [firstTimer, setFirstTimer] = useState<NodeJS.Timeout | null>(null)
+    const [secondTimer, setSecondTimer] = useState<NodeJS.Timeout | null>(null)
 
     // Note to self: (bug)
     // When using on-screen btns, user has the ability to phase thru objects

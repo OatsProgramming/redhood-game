@@ -1,0 +1,14 @@
+{
+    "headers": [
+      {
+        "source": "/assets/(.*).ttf",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "font/ttf"
+          }
+        ]
+      }
+    ]
+}
+  
