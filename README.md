@@ -11,3 +11,14 @@
 
 [Fonts for Flash](https://www.1001fonts.com/users/fontsforflash/)
 - FFF Forward Font [🔗](https://www.1001fonts.com/fff-forward-font.html)
+
+[CraftPix.net](https://craftpix.net/)
+- Blacksmith Shop [🔗](https://free-game-assets.itch.io/blacksmith-craft-pixel-art-game-assets)
+
+[Wildan Rahmat](https://www.artstation.com/wildan_frost)
+- Pixel Bush [🔗](https://www.artstation.com/artwork/Nx2vz5)
+- Pixel Armor [🔗](https://www.artstation.com/artwork/B395ek)
+- Pixel Swords [🔗]https://www.artstation.com/artwork/485xKL
+- Monster Drops [🔗](https://www.artstation.com/artwork/XnvPK0)
+- Bunny in a Juice Box [🔗](https://www.artstation.com/artwork/9mRnlW)
+- Quest Items & Potions [🔗](https://www.artstation.com/artwork/XnQGaR)
