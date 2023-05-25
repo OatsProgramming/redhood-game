@@ -4,8 +4,8 @@
     left: 0;
     width: 100%;
     color: rgba(0, 0, 0, 0.908);
-    /* font-family: pixelText, sans-serif; */
-    /* font-size: small; */
+    font-family: pixelText, sans-serif;
+    font-size: small;
     display: grid;
     gap: 0.5rem;
 }
