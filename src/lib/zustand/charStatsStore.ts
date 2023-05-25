@@ -1,16 +1,5 @@
 import { create } from "zustand";
 
-type CharStatsStore = {
-    hp: number,
-    maxHP: number,
-    debuffSet: Set<string>,
-    coins: number,
-    updateHP: (toBeAdded: number) => void,
-    updateMaxHP: (toBeAdded: number) => void,
-    updateCoins: (toBeAdded: number) => void,
-    updateDebuff: (debuff: string, toBeAdded?: true) => void,
-}
-
 const useCharStats = create<CharStatsStore>()((set) => ({
     hp: 100,
     maxHP: 200,

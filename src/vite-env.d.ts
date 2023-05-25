@@ -67,3 +67,14 @@ type CardTypeStore = {
     setIsSelling: (isSelling: boolean) => void,
     setInInventory: (dialogRef: RefObject<HTMLDialogElement>) => void
 }
+
+type CharStatsStore = {
+    hp: number,
+    maxHP: number,
+    debuffSet: Set<string>,
+    coins: number,
+    updateHP: (toBeAdded: number) => void,
+    updateMaxHP: (toBeAdded: number) => void,
+    updateCoins: (toBeAdded: number) => void,
+    updateDebuff: (debuff: string, toBeAdded?: true) => void,
+}

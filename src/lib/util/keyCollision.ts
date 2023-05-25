@@ -7,7 +7,7 @@ import charLocator from "./charLocator"
  * @returns 
  */
 
-export default function keyCollision(charStore: CharacterAction & CharacterState, obstacle: HTMLDivElement) {
+export default function keyCollision(charStore: CharMoveState & CharMoveAction, obstacle: HTMLDivElement) {
     const { character: char, setCharPos, getCurrentPos } = charStore
     if (!char) return
 

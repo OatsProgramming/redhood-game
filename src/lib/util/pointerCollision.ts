@@ -13,7 +13,7 @@ import doIntersect from "./doIntersect"
  */
 
 
-export default function pointerCollision(charStore: CharacterAction & CharacterState, e: PointerEvent, obsImg: HTMLImageElement) {
+export default function pointerCollision(charStore: CharMoveState & CharMoveAction, e: PointerEvent, obsImg: HTMLImageElement) {
     const { character: char, setCharPos, getCurrentPos } = charStore
     if (!char || !obsImg) return
 

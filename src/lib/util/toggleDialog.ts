@@ -14,8 +14,8 @@ const cache = new Map()
 
 export default function toggleDialog(
     dialogRef: RefObject<HTMLDialogElement>, 
-    character: CharacterState['character'],
-    setCharacter: CharacterAction['setCharacter'],
+    character: CharMoveState['character'],
+    setCharacter: CharMoveAction['setCharacter'],
 ) {
     const dialog = dialogRef.current
     if (!dialog) return
