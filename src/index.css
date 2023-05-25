@@ -39,6 +39,13 @@ body {
   min-height: 100vh;
   background-image: url('https://www.textures.com/system/gallery/photos/Floors/Streets/59364/FloorStreets0083_1_350.jpg');
   /* background-size: contain; */
+  font-family: pixelText, sans-serif;
+}
+
+@media (max-width: 720px) {
+  body {
+    font-size: small;
+  }
 }
 
 h1 {
