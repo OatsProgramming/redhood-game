@@ -1,18 +1,21 @@
 import { lazy, memo } from 'react'
 import './itemCard.css'
-import isEqual from 'lodash/isEqual'
 import cacheInventoryItem, { itemCache } from '../../lib/util/cacheInventoryItem'
+import { isEqual } from 'lodash'
+import useCardType from '../../lib/zustand/cardTypeStore'
 const DetailsDialog = lazy(() =>
     import('../Dialog/DetailsDialog/DetailsDialog')
 )
 
-const ItemCard = memo(function ({ item, squareImg, rectImg, inInventory, isSelling }: {
+function itemCard({ item, squareImg, rectImg }: {
     item: Item | InventoryItem,
     squareImg: string,
-    rectImg: string,
-    inInventory?: true,
-    isSelling?: boolean,
+    rectImg: string
 }) {
+    console.log('asd')
+
+    const { inInventory, isSelling } = useCardType()
+
     if (inInventory || isSelling) cacheInventoryItem(item as InventoryItem)
 
     return (
@@ -34,22 +37,17 @@ const ItemCard = memo(function ({ item, squareImg, rectImg, inInventory, isSelli
             <DetailsDialog 
                 item={item} 
                 rectImg={rectImg} 
-                inInventory={inInventory ?? false} 
-                isSelling={isSelling ?? false}
+                inInventory={inInventory} 
+                isSelling={isSelling}
             />
         </li>
     )
-}, (prevProps, nextProps) => {
-    const { inInventory, isSelling, item } = nextProps
+}
 
-    // Compare by amnt if dealing with user related items
-    if (inInventory || isSelling) {
-        const prevAmnt = itemCache.get(item)
-        const nextAmnt = (item as InventoryItem).amnt
-        return prevAmnt === nextAmnt
-    }
-    // Otherwise compare by props
-    return prevProps.item.name === nextProps.item.name
+const ItemCard = memo(itemCard, (prev, next) => {
+    const prevAmnt = itemCache.get(prev.item.name)
+    const nextAmnt = (next.item as InventoryItem).amnt
+    return prevAmnt === nextAmnt && isEqual(prev, next)
 })
 
 export default ItemCard

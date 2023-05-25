@@ -4,12 +4,14 @@ import useInventory from "../../../lib/zustand/inventoryStore";
 import toggleModal from "../../../lib/util/toggleDialog";
 import useCharMove from "../../../lib/zustand/charMoveStore";
 import ItemCard from "../../ItemCard/ItemCard";
+import useCardType from "../../../lib/zustand/cardTypeStore";
 
 export default function InventoryDialog() {
     const { inventory } = useInventory()
     const { character, setCharacter } = useCharMove()
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [category, setCategory] = useState<Category>('armor')
+    const { setInInventory } = useCardType()
 
     // useMemo since character movement rerenders components
     const showItems = useMemo(function () {
@@ -25,6 +27,7 @@ export default function InventoryDialog() {
         function handleModal(e: KeyboardEvent) {
             if (e.code !== 'KeyE') return
             toggleModal(dialogRef, character, setCharacter)
+            setInInventory(dialogRef)
         }
 
         window.addEventListener('keydown', handleModal)
@@ -67,7 +70,6 @@ export default function InventoryDialog() {
                             item={item}
                             squareImg='https://i.imgur.com/vkHFpib.png'
                             rectImg="https://i.imgur.com/yhXHKa8.png"
-                            inInventory
                         />
                     ))
                 ) : (

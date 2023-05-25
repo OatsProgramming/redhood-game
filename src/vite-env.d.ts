@@ -57,3 +57,10 @@ type InventoryStore = {
     addItem: (item: InventoryItem) => void,
     removeItem: (item: InventoryItem) => void
 }
+
+type CardTypeStore = {
+    isSelling: boolean,
+    inInventory: boolean,
+    setIsSelling: (isSelling: boolean) => void,
+    setInInventory: (dialogRef: RefObject<HTMLDialogElement>) => void
+}

@@ -1,7 +1,10 @@
 /**
  * Stores previous item.amnt . Used to compare with new item.amnt when rerendering
+ * 
+ * @param key - item name 
+ * @param value - item amnt
  */
-export const itemCache = new WeakMap<InventoryItem | Item, number>()
+export const itemCache = new Map<string, number>()
 
 /**
  *  To cache item.amnt if item is an InventoryItem.
@@ -12,6 +15,6 @@ export const itemCache = new WeakMap<InventoryItem | Item, number>()
  */
 
 export default function cacheInventoryItem(item: InventoryItem) {
-    if (itemCache.has(item)) itemCache.delete(item)
-    itemCache.set(item, (item as InventoryItem).amnt)
+    if (itemCache.has(item.name)) itemCache.delete(item.name)
+    itemCache.set(item.name, (item as InventoryItem).amnt)
 }

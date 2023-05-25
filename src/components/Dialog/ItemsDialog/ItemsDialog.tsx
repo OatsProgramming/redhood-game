@@ -4,6 +4,7 @@ import ItemCard from "../../ItemCard/ItemCard";
 import charMove from "../../../lib/zustand/charMoveStore";
 import toggleDialog from "../../../lib/util/toggleDialog";
 import useInventory from "../../../lib/zustand/inventoryStore";
+import useCardType from "../../../lib/zustand/cardTypeStore";
 
 export default function ItemsDialog({ items, isCharNear }: {
     items: Item[],
@@ -12,8 +13,8 @@ export default function ItemsDialog({ items, isCharNear }: {
     const dialogRef = useRef<HTMLDialogElement>(null)
     const { character, setCharacter } = charMove()
     const [itemList, setItemList] = useState(items)
-    const [isSelling, setIsSelling] = useState(false)
     const { inventory } = useInventory()
+    const { isSelling, setIsSelling } = useCardType()
     
     useEffect(() => {
         if (isSelling) {
@@ -29,6 +30,7 @@ export default function ItemsDialog({ items, isCharNear }: {
             const dialog = dialogRef.current
             if (e.code !== 'KeyQ' || !dialog || !isCharNear) return
             toggleDialog(dialogRef, character, setCharacter)
+            if (!dialog.open) setIsSelling(false)
         }
 
         window.addEventListener('keydown', interactModal)
@@ -49,7 +51,6 @@ export default function ItemsDialog({ items, isCharNear }: {
                         item={item}
                         squareImg="https://i.imgur.com/zpWAtja.png"
                         rectImg="'https://i.imgur.com/TTSJ7yA.png'"
-                        isSelling={isSelling}
                     />
                 ))}
             </ul>
