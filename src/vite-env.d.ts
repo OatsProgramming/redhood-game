@@ -37,7 +37,7 @@ type RequiredStyles = Record<ReqCSS, string | number> & {
     scale?: string
 }
 
-type Category = 'ingestible' | 'armor' | 'material' | 'quest'
+type Category = 'ingestible' | 'equipment' | 'material' | 'quest'
 
 type Item = {
     name: string,
@@ -46,6 +46,8 @@ type Item = {
     price: number,
     category: Category,
     addHP?: number,
+    addDef?: number,
+    addAtk?: number,
 }
 
 type InventoryItem = Item & {
